@@ -1,0 +1,14 @@
+{
+  "name": "scott-tetris",
+  "version": "1.0.0",
+  "description": "SCOTT - Supreme Clearing Optimized Tetris Titan",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "ws": "^8.18.0"
+  }
+}

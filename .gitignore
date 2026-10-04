@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.log
+.DS_Store
+Thumbs.db
+scott.py
+requirements.txt
+__pycache__/
