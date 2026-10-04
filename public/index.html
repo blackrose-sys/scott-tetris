@@ -188,6 +188,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);user-
 }
 .speed-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:none;box-shadow:0 0 8px var(--cyan)}
 .speed-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text);font-weight:600;min-width:28px}
+.stealth-btn{
+  background:none;border:1px solid rgba(255,255,255,0.15);color:var(--dim);width:26px;height:26px;
+  border-radius:6px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;
+  transition:all 0.25s;padding:0;margin-left:4px;flex-shrink:0;
+}
+.stealth-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.stealth-btn.hidden-mode{opacity:0.4}
+.ai-hidden .ai-badge,.ai-hidden .ai-controls{display:none !important}
 
 .game-body{flex:1;display:flex;align-items:center;justify-content:center;gap:24px;padding:8px 16px;overflow:hidden}
 .player-section{display:flex;align-items:flex-start;gap:8px}
@@ -384,9 +392,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);user-
       <span id="ai-badge-el" class="ai-badge" style="display:none">AI ACTIVE</span>
       <div id="ai-controls" class="ai-controls" style="display:none">
         <label>SPEED</label>
-        <input type="range" id="ai-speed-slider" class="speed-slider" min="1" max="10" value="7">
-        <span class="speed-label" id="ai-speed-label">7</span>
+        <input type="range" id="ai-speed-slider" class="speed-slider" min="1" max="10" value="1">
+        <span class="speed-label" id="ai-speed-label">1</span>
       </div>
+      <button id="stealth-btn" class="stealth-btn" style="display:none" title="Hide/Show AI controls">&#128065;</button>
     </div>
   </div>
   <div class="game-body">
@@ -739,6 +748,13 @@ class App{
     const keyMap={'ArrowLeft':'left','ArrowRight':'right','ArrowDown':'soft','ArrowUp':'cw','KeyZ':'ccw','KeyX':'cw','KeyC':'hold','ShiftLeft':'hold','Space':'hard'};
     window.addEventListener('keydown',e=>{if(!this.game||this.game.over||!this.game.started)return;const a=keyMap[e.code];if(a){e.preventDefault();this.game.keyDown(a);}});
     window.addEventListener('keyup',e=>{if(!this.game)return;const a=keyMap[e.code];if(a)this.game.keyUp(a);});
+
+    // Stealth toggle - hide AI badge/controls but keep AI running
+    document.getElementById('stealth-btn').onclick=()=>{
+      const status=document.querySelector('.game-status');
+      status.classList.toggle('ai-hidden');
+      document.getElementById('stealth-btn').classList.toggle('hidden-mode');
+    };
   }
 
   _login(){
@@ -831,9 +847,13 @@ class App{
   }
 
   _showAIUI(){
-    document.getElementById('ai-badge-el').style.display=this.isBot?'inline-block':'none';
-    document.getElementById('ai-controls').style.display=this.isBot?'flex':'none';
-    if(this.isBot){const slider=document.getElementById('ai-speed-slider');this.game.setAISpeed(parseInt(slider.value));}
+    const show=this.isBot;
+    document.getElementById('ai-badge-el').style.display=show?'inline-block':'none';
+    document.getElementById('ai-controls').style.display=show?'flex':'none';
+    document.getElementById('stealth-btn').style.display=show?'flex':'none';
+    if(show){this.game.setAISpeed(1);}
+    // Remove hidden class on fresh start
+    document.querySelector('.game-status').classList.remove('ai-hidden');
   }
 
   _setupOpps(){
