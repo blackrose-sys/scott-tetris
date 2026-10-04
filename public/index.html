@@ -3,515 +3,468 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SCOTT - Supreme Clearing Optimized Tetris Titan</title>
-<meta name="description" content="SCOTT - A competitive multiplayer Tetris arena. Duel or trio battles with friends.">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>TETR.TROPA - Squad Up. Stack Up. Throw Down.</title>
+<meta name="description" content="TETR.TROPA - Competitive multiplayer Tetris arena. Duel or trio battles with your tropa.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #06060f;
-  --bg2: #0c0c1a;
-  --bg3: rgba(14,14,30,0.92);
-  --panel: rgba(16,16,36,0.88);
-  --card: rgba(20,20,48,0.75);
-  --cyan: #00dcff;
-  --purple: #a050ff;
-  --pink: #ff3c6e;
-  --green: #2dff8c;
-  --gold: #ffc830;
-  --red: #ff4455;
-  --text: #e0e0ff;
-  --dim: #5a5a8a;
-  --border: rgba(90,90,180,0.18);
-  --glow: rgba(0,220,255,0.25);
+  --bg: #05050e;
+  --bg2: #0a0a18;
+  --bg3: rgba(12,12,28,0.94);
+  --panel: rgba(14,14,34,0.9);
+  --card: rgba(18,18,44,0.75);
+  --card2: rgba(22,22,52,0.6);
+  --cyan: #00e5ff;
+  --purple: #b24dff;
+  --pink: #ff3875;
+  --green: #00ff88;
+  --gold: #ffcc00;
+  --orange: #ff7b00;
+  --red: #ff2244;
+  --blue: #4488ff;
+  --text: #e4e4ff;
+  --dim: #555580;
+  --dim2: #3a3a60;
+  --border: rgba(80,80,180,0.14);
+  --border2: rgba(100,100,200,0.25);
+  --glow-c: rgba(0,229,255,0.2);
+  --glow-p: rgba(178,77,255,0.2);
+  --shadow: 0 20px 60px rgba(0,0,0,0.5);
+  --radius: 14px;
+  --radius-sm: 8px;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow: hidden; }
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  user-select: none;
-}
-.screen { display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-.screen.active { display: flex; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);user-select:none;-webkit-font-smoothing:antialiased}
+.screen{display:none;width:100%;height:100%;position:absolute;top:0;left:0}
+.screen.active{display:flex}
 
-/* ── Login ── */
-#login-screen {
-  align-items: center; justify-content: center; flex-direction: column;
-  background: linear-gradient(-45deg, #06061a, #140828, #082028, #060616);
-  background-size: 400% 400%;
-  animation: bgShift 20s ease infinite;
+/* ═══════ LOGIN ═══════ */
+#login-screen{
+  align-items:center;justify-content:center;flex-direction:column;
+  background:linear-gradient(-45deg,#050514,#120828,#061828,#050510);
+  background-size:400% 400%;animation:bgShift 25s ease infinite;
+  overflow:hidden;
 }
-@keyframes bgShift {
-  0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
-}
-.login-card {
-  background: var(--bg3);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 48px 44px 36px;
-  text-align: center;
-  width: 400px;
-  max-width: 92vw;
-  box-shadow: 0 0 80px rgba(0,220,255,0.06), 0 20px 60px rgba(0,0,0,0.5);
-}
-.logo-text {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 52px;
-  font-weight: 900;
-  letter-spacing: 14px;
-  background: linear-gradient(135deg, var(--cyan), var(--purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  display: block;
-  text-shadow: none;
-  filter: drop-shadow(0 0 20px rgba(0,220,255,0.3));
-}
-.logo-sub {
-  display: block;
-  font-size: 11px;
-  color: var(--dim);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-top: 6px;
-}
-.login-form { margin-top: 36px; }
-.input {
-  width: 100%;
-  background: rgba(8,8,24,0.9);
-  border: 2px solid var(--border);
-  color: var(--text);
-  padding: 14px 18px;
-  border-radius: 10px;
-  font-size: 17px;
-  font-family: 'Inter', sans-serif;
-  outline: none;
-  transition: all 0.3s;
-}
-.input:focus {
-  border-color: var(--cyan);
-  box-shadow: 0 0 24px rgba(0,220,255,0.12);
-}
-.input::placeholder { color: var(--dim); }
-.btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  border: none;
-  color: #fff;
-  padding: 13px 32px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  transition: all 0.25s;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  gap: 8px;
-}
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0); }
-.btn-primary {
-  background: linear-gradient(135deg, var(--cyan), var(--purple));
-  box-shadow: 0 4px 20px rgba(0,220,255,0.25);
-}
-.btn-primary:hover { box-shadow: 0 8px 30px rgba(0,220,255,0.35); }
-.btn-danger {
-  background: linear-gradient(135deg, var(--pink), var(--red));
-  box-shadow: 0 4px 15px rgba(255,60,110,0.2);
-}
-.btn-create {
-  background: linear-gradient(135deg, #1a1a3a, #2a1a4a);
-  border: 1px solid var(--border);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-.btn-create:hover { border-color: var(--cyan); box-shadow: 0 4px 25px var(--glow); }
-.btn-solo {
-  background: linear-gradient(135deg, var(--green), #18c070);
-  box-shadow: 0 4px 15px rgba(45,255,140,0.2);
-}
-.btn-sm { padding: 8px 18px; font-size: 12px; letter-spacing: 1px; border-radius: 8px; }
-.btn-join {
-  background: linear-gradient(135deg, var(--cyan), #0090cc);
-  padding: 8px 20px; font-size: 12px; border-radius: 8px;
-}
-#login-btn { width: 100%; margin-top: 16px; padding: 15px; font-size: 15px; }
+@keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-/* ── Lobby ── */
-#lobby-screen {
-  flex-direction: column;
-  background: var(--bg);
-}
-.lobby-header {
-  display: flex; align-items: center; gap: 20px;
-  padding: 16px 30px;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-}
-.lobby-header .logo-text { font-size: 24px; letter-spacing: 6px; }
-.welcome { color: var(--dim); font-size: 14px; margin-left: auto; }
-.welcome b { color: var(--cyan); }
-.lobby-body {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  padding: 40px 20px; gap: 30px; overflow-y: auto;
-}
-.lobby-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
-.room-list {
-  width: 100%; max-width: 650px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  overflow: hidden;
-}
-.room-list-header {
-  padding: 14px 20px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  color: var(--dim);
-  border-bottom: 1px solid var(--border);
-}
-.room-list-body { padding: 10px; max-height: 50vh; overflow-y: auto; }
-.room-card {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 18px;
-  background: var(--card);
-  border: 1px solid transparent;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  transition: all 0.2s;
-}
-.room-card:hover { border-color: var(--border); background: rgba(25,25,55,0.8); }
-.room-mode {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; font-weight: 700;
-  padding: 4px 10px; border-radius: 6px;
-  text-transform: uppercase; letter-spacing: 1px;
-}
-.room-mode.duel { background: rgba(0,220,255,0.15); color: var(--cyan); }
-.room-mode.trio { background: rgba(160,80,255,0.15); color: var(--purple); }
-.room-names { flex: 1; font-size: 14px; color: var(--text); }
-.room-count { font-size: 13px; color: var(--dim); font-family: 'JetBrains Mono', monospace; }
-.no-rooms { text-align: center; padding: 30px; color: var(--dim); font-size: 14px; }
+/* Floating orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.12;animation:orbFloat 20s ease-in-out infinite}
+.orb-1{width:500px;height:500px;background:var(--cyan);top:-100px;left:-100px;animation-delay:0s}
+.orb-2{width:400px;height:400px;background:var(--purple);bottom:-100px;right:-100px;animation-delay:-7s}
+.orb-3{width:300px;height:300px;background:var(--pink);top:50%;left:50%;animation-delay:-14s}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(50px,-30px) scale(1.1)}50%{transform:translate(-30px,50px) scale(0.9)}75%{transform:translate(-50px,-20px) scale(1.05)}}
 
-/* ── Game ── */
-#game-screen { flex-direction: column; background: var(--bg); }
-.game-topbar {
-  display: flex; align-items: center;
-  padding: 8px 20px; gap: 16px;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  min-height: 44px;
+.login-card{
+  background:var(--bg3);backdrop-filter:blur(30px);
+  border:1px solid var(--border2);border-radius:24px;
+  padding:52px 48px 40px;text-align:center;width:420px;max-width:92vw;
+  box-shadow:var(--shadow),0 0 100px rgba(0,229,255,0.04);
+  position:relative;z-index:2;
+  animation:cardIn 0.6s cubic-bezier(0.16,1,0.3,1);
 }
-.game-topbar .logo-text { font-size: 18px; letter-spacing: 5px; }
-.game-status {
-  margin-left: auto;
-  font-size: 13px; color: var(--dim);
-  font-family: 'JetBrains Mono', monospace;
+@keyframes cardIn{0%{opacity:0;transform:translateY(30px) scale(0.95)}100%{opacity:1;transform:translateY(0) scale(1)}}
+
+.logo{margin-bottom:8px}
+.logo-main{
+  font-family:'JetBrains Mono',monospace;font-size:46px;font-weight:900;
+  letter-spacing:6px;
+  background:linear-gradient(135deg,var(--cyan) 0%,var(--purple) 50%,var(--pink) 100%);
+  background-size:200% auto;animation:gradText 4s linear infinite;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  display:block;
 }
-.ai-badge {
-  display: inline-block;
-  padding: 3px 10px; border-radius: 6px;
-  font-size: 11px; font-weight: 700;
-  background: linear-gradient(135deg, var(--cyan), var(--purple));
-  color: #fff;
-  letter-spacing: 1px;
-  animation: aiBadgePulse 2s ease-in-out infinite;
-  margin-left: 10px;
+@keyframes gradText{0%{background-position:0% center}100%{background-position:200% center}}
+.logo-dot{-webkit-text-fill-color:var(--pink)}
+.logo-sub{display:block;font-size:12px;color:var(--dim);letter-spacing:4px;text-transform:uppercase;margin-top:6px;font-weight:500}
+
+.login-form{margin-top:36px}
+.input-wrap{position:relative;margin-bottom:16px}
+.input{
+  width:100%;background:rgba(6,6,20,0.9);
+  border:2px solid var(--border);color:var(--text);
+  padding:15px 20px;border-radius:12px;font-size:16px;
+  font-family:'Inter',sans-serif;outline:none;transition:all 0.35s;
+  letter-spacing:0.5px;
 }
-@keyframes aiBadgePulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
-.game-body {
-  flex: 1; display: flex; align-items: center; justify-content: center; gap: 30px;
-  padding: 10px 20px;
-  overflow: hidden;
+.input:focus{border-color:var(--cyan);box-shadow:0 0 30px var(--glow-c),inset 0 0 20px rgba(0,229,255,0.03)}
+.input::placeholder{color:var(--dim)}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:none;color:#fff;padding:14px 32px;border-radius:12px;
+  font-size:13px;font-weight:700;font-family:'Inter',sans-serif;
+  cursor:pointer;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);
+  text-transform:uppercase;letter-spacing:2.5px;position:relative;overflow:hidden;
 }
-.player-section { display: flex; align-items: flex-start; gap: 10px; }
-.side-col { display: flex; flex-direction: column; gap: 10px; width: 130px; }
-.panel {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,0.1),transparent);pointer-events:none}
+.btn:hover{transform:translateY(-3px)}
+.btn:active{transform:translateY(0);transition-duration:0.1s}
+
+.btn-primary{
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  box-shadow:0 6px 25px var(--glow-c);
 }
-.panel-title {
-  font-size: 11px; font-weight: 700; letter-spacing: 3px;
-  color: var(--dim); margin-bottom: 8px;
+.btn-primary:hover{box-shadow:0 10px 40px var(--glow-c)}
+.btn-danger{background:linear-gradient(135deg,var(--pink),var(--red));box-shadow:0 4px 15px rgba(255,56,117,0.25)}
+.btn-create{
+  background:rgba(16,16,40,0.9);border:1px solid var(--border2);
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
 }
-.board-wrapper { position: relative; }
-#main-board {
-  display: block;
-  border: 2px solid rgba(60,60,120,0.4);
-  border-radius: 4px;
-  box-shadow: 0 0 40px rgba(0,220,255,0.08), inset 0 0 20px rgba(0,0,0,0.4);
+.btn-create:hover{border-color:var(--cyan);box-shadow:0 4px 30px var(--glow-c)}
+.btn-solo{background:linear-gradient(135deg,var(--green),#00cc6a);box-shadow:0 4px 20px rgba(0,255,136,0.2)}
+.btn-sm{padding:9px 18px;font-size:11px;letter-spacing:1.5px;border-radius:var(--radius-sm)}
+.btn-join{background:linear-gradient(135deg,var(--cyan),#0099cc);padding:8px 20px;font-size:11px;border-radius:var(--radius-sm)}
+#login-btn{width:100%;padding:16px;font-size:14px}
+
+.login-version{font-size:11px;color:var(--dim2);margin-top:20px;letter-spacing:2px}
+
+/* ═══════ LOBBY ═══════ */
+#lobby-screen{flex-direction:column;background:var(--bg)}
+.lobby-top{
+  display:flex;align-items:center;gap:16px;
+  padding:14px 28px;background:var(--bg2);
+  border-bottom:1px solid var(--border);
 }
-.garbage-bar {
-  position: absolute; bottom: 2px; left: -10px;
-  width: 6px; border-radius: 3px;
-  background: var(--red);
-  transition: height 0.2s;
-  box-shadow: 0 0 8px rgba(255,68,85,0.4);
+.lobby-top .logo-main{font-size:20px;letter-spacing:4px}
+.lobby-welcome{color:var(--dim);font-size:13px;margin-left:auto;font-weight:500}
+.lobby-welcome b{color:var(--cyan);font-weight:700}
+.lobby-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:36px 20px;gap:28px;overflow-y:auto}
+.lobby-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.lobby-actions .btn{min-width:180px}
+
+.room-list{width:100%;max-width:680px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.room-list-hdr{padding:14px 20px;font-size:12px;font-weight:700;letter-spacing:3px;color:var(--dim);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.refresh-btn{background:none;border:1px solid var(--border);color:var(--dim);padding:4px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.refresh-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.room-list-body{padding:8px;max-height:50vh;overflow-y:auto}
+.room-card{
+  display:flex;align-items:center;gap:14px;padding:14px 16px;
+  background:var(--card2);border:1px solid transparent;border-radius:10px;
+  margin-bottom:6px;transition:all 0.25s;
 }
-.stat-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 4px 0;
+.room-card:hover{border-color:var(--border2);background:var(--card);transform:translateX(4px)}
+.room-badge{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:800;
+  padding:5px 12px;border-radius:6px;text-transform:uppercase;letter-spacing:1.5px;
 }
-.stat-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--dim);
+.room-badge.duel{background:rgba(0,229,255,0.12);color:var(--cyan);border:1px solid rgba(0,229,255,0.15)}
+.room-badge.trio{background:rgba(178,77,255,0.12);color:var(--purple);border:1px solid rgba(178,77,255,0.15)}
+.room-names{flex:1;font-size:13px;color:var(--text);font-weight:500}
+.room-count{font-size:12px;color:var(--dim);font-family:'JetBrains Mono',monospace;font-weight:600}
+.no-rooms{text-align:center;padding:36px;color:var(--dim);font-size:13px}
+
+/* ═══════ GAME ═══════ */
+#game-screen{flex-direction:column;background:var(--bg)}
+.game-top{
+  display:flex;align-items:center;gap:14px;
+  padding:7px 18px;background:var(--bg2);
+  border-bottom:1px solid var(--border);min-height:42px;
 }
-.stat-value {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 16px; font-weight: 700; color: var(--text);
+.game-top .logo-main{font-size:15px;letter-spacing:3px}
+.game-status{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--dim);font-family:'JetBrains Mono',monospace}
+.ai-badge{
+  padding:3px 10px;border-radius:6px;font-size:10px;font-weight:800;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  color:#fff;letter-spacing:1.5px;animation:pulse 2.5s ease-in-out infinite;
 }
-.hold-canvas, .next-canvas { display: block; margin: 0 auto; }
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px var(--glow-c)}50%{opacity:0.7;box-shadow:0 0 20px var(--glow-c)}}
+
+/* AI Speed Control */
+.ai-controls{
+  display:flex;align-items:center;gap:10px;
+  padding:4px 14px;background:rgba(0,229,255,0.06);
+  border:1px solid rgba(0,229,255,0.12);border-radius:8px;
+}
+.ai-controls label{font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase}
+.speed-slider{
+  -webkit-appearance:none;appearance:none;width:100px;height:4px;
+  background:linear-gradient(90deg,var(--green),var(--gold),var(--red));
+  border-radius:2px;outline:none;cursor:pointer;
+}
+.speed-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
+  background:#fff;box-shadow:0 0 8px var(--cyan);cursor:pointer;
+}
+.speed-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:none;box-shadow:0 0 8px var(--cyan)}
+.speed-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text);font-weight:600;min-width:28px}
+
+.game-body{flex:1;display:flex;align-items:center;justify-content:center;gap:24px;padding:8px 16px;overflow:hidden}
+.player-section{display:flex;align-items:flex-start;gap:8px}
+
+/* Side panels */
+.side-col{display:flex;flex-direction:column;gap:8px;width:140px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:12px;transition:border-color 0.3s}
+.panel:hover{border-color:var(--border2)}
+.panel-title{font-size:10px;font-weight:800;letter-spacing:3px;color:var(--dim);margin-bottom:8px;text-transform:uppercase}
+
+/* Board */
+.board-wrapper{position:relative}
+#main-board{
+  display:block;border:2px solid rgba(50,50,100,0.35);border-radius:4px;
+  box-shadow:0 0 50px rgba(0,229,255,0.06),0 0 100px rgba(178,77,255,0.03),inset 0 0 30px rgba(0,0,0,0.5);
+  transition:box-shadow 0.3s;
+}
+.board-glow{animation:boardPulse 4s ease-in-out infinite}
+@keyframes boardPulse{0%,100%{box-shadow:0 0 50px rgba(0,229,255,0.06),inset 0 0 30px rgba(0,0,0,0.5)}50%{box-shadow:0 0 70px rgba(0,229,255,0.1),0 0 120px rgba(178,77,255,0.04),inset 0 0 30px rgba(0,0,0,0.5)}}
+.garbage-bar{
+  position:absolute;bottom:2px;left:-10px;width:6px;border-radius:3px;
+  background:linear-gradient(to top,var(--red),var(--orange));
+  transition:height 0.3s cubic-bezier(0.16,1,0.3,1);
+  box-shadow:0 0 10px rgba(255,34,68,0.4);
+}
+
+/* Stats */
+.stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0}
+.stat-label{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
+.stat-value{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--text);transition:color 0.3s}
+.stat-value.highlight{color:var(--gold)}
+.stat-divider{height:1px;background:var(--border);margin:6px 0}
+.stat-mini{font-size:10px;font-weight:600;color:var(--dim);font-family:'JetBrains Mono',monospace}
+.stat-mini span{color:var(--text)}
+
+.atk-counter{
+  text-align:center;padding:8px;margin-top:4px;
+  background:linear-gradient(135deg,rgba(255,123,0,0.08),rgba(255,56,117,0.08));
+  border:1px solid rgba(255,123,0,0.15);border-radius:var(--radius-sm);
+}
+.atk-label{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--orange)}
+.atk-value{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;color:var(--orange);margin-top:2px}
 
 /* Opponents */
-.opponents-section {
-  display: flex; flex-direction: column; gap: 16px;
-  align-items: center;
+.opponents-section{display:flex;flex-direction:column;gap:14px;align-items:center}
+.opponent-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+  padding:10px;text-align:center;position:relative;transition:all 0.3s;
 }
-.opponent-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px;
-  text-align: center;
-  position: relative;
+.opponent-card:hover{border-color:var(--border2)}
+.opp-name{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--cyan);margin-bottom:5px}
+.opp-canvas{display:block;margin:0 auto;border:1px solid rgba(40,40,80,0.3);border-radius:2px}
+.opp-stats{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);margin-top:5px;font-weight:600}
+.opp-dead{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.8);border-radius:var(--radius);
+  font-size:13px;font-weight:900;color:var(--pink);letter-spacing:3px;
+  animation:deadIn 0.4s ease;
 }
-.opponent-name {
-  font-size: 12px; font-weight: 700; letter-spacing: 1px;
-  color: var(--cyan); margin-bottom: 6px;
-}
-.opponent-canvas {
-  display: block; margin: 0 auto;
-  border: 1px solid rgba(60,60,120,0.3);
-  border-radius: 2px;
-}
-.opponent-stats {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: var(--dim); margin-top: 6px;
-}
-.opponent-dead {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,0.75);
-  border-radius: 10px;
-  font-size: 14px; font-weight: 900;
-  color: var(--pink); letter-spacing: 3px;
-}
+@keyframes deadIn{0%{opacity:0;transform:scale(0.8)}100%{opacity:1;transform:scale(1)}}
 
 /* Overlays */
-.overlay {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(4,4,12,0.88);
-  backdrop-filter: blur(8px);
-  z-index: 100;
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(3,3,10,0.9);backdrop-filter:blur(12px);z-index:100}
+.overlay.hidden{display:none}
+.overlay-card{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:20px;
+  padding:40px 44px;text-align:center;min-width:340px;
+  box-shadow:var(--shadow);animation:cardIn 0.4s cubic-bezier(0.16,1,0.3,1);
 }
-.overlay.hidden { display: none; }
-.overlay-card {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 36px 40px;
-  text-align: center;
-  min-width: 320px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+.overlay-card h2{
+  font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:4px;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:18px;
 }
-.overlay-card h2 {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 24px; letter-spacing: 4px;
-  background: linear-gradient(135deg, var(--cyan), var(--purple));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 20px;
+.room-player{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;margin:5px 0;background:var(--card);border-radius:var(--radius-sm);
+  border:1px solid var(--border);transition:all 0.2s;
 }
-.room-players-list { margin: 16px 0; }
-.room-player {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 16px; margin: 6px 0;
-  background: var(--card); border-radius: 8px;
-}
-.room-player .name { font-weight: 600; }
-.ready-tag {
-  font-size: 11px; font-weight: 700; padding: 3px 10px;
-  border-radius: 5px; letter-spacing: 1px;
-}
-.ready-tag.yes { background: rgba(45,255,140,0.15); color: var(--green); }
-.ready-tag.no { background: rgba(90,90,130,0.2); color: var(--dim); }
-.room-hint { font-size: 12px; color: var(--dim); margin-top: 14px; }
+.room-player .name{font-weight:600;font-size:14px}
+.room-player .host-tag{font-size:10px;color:var(--gold);font-weight:700;margin-left:6px}
+.ready-tag{font-size:10px;font-weight:800;padding:4px 12px;border-radius:5px;letter-spacing:1.5px;transition:all 0.3s}
+.ready-tag.yes{background:rgba(0,255,136,0.12);color:var(--green);border:1px solid rgba(0,255,136,0.15)}
+.ready-tag.no{background:rgba(80,80,120,0.15);color:var(--dim);border:1px solid var(--border)}
+.room-hint{font-size:11px;color:var(--dim);margin-top:16px;font-style:italic}
 
 /* Countdown */
-.countdown-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 120px; font-weight: 900;
-  background: linear-gradient(135deg, var(--cyan), var(--purple));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 40px rgba(0,220,255,0.4));
-  animation: countPulse 0.6s ease-out;
+.cd-num{
+  font-family:'JetBrains Mono',monospace;font-size:140px;font-weight:900;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 50px rgba(0,229,255,0.35));
+  animation:cdPop 0.5s cubic-bezier(0.16,1,0.3,1);
 }
-@keyframes countPulse {
-  0%{transform:scale(1.5);opacity:0} 40%{transform:scale(1);opacity:1} 100%{opacity:1}
-}
-.go-text {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 80px; font-weight: 900;
-  color: var(--green);
-  filter: drop-shadow(0 0 30px rgba(45,255,140,0.4));
-  animation: countPulse 0.5s ease-out;
+@keyframes cdPop{0%{transform:scale(2);opacity:0}50%{transform:scale(0.95)}100%{transform:scale(1);opacity:1}}
+.go-text{
+  font-family:'JetBrains Mono',monospace;font-size:90px;font-weight:900;
+  color:var(--green);filter:drop-shadow(0 0 40px rgba(0,255,136,0.4));
+  animation:cdPop 0.4s cubic-bezier(0.16,1,0.3,1);
 }
 
-/* Game Over overlay */
-.gameover-title { font-size: 32px !important; }
-.gameover-subtitle {
-  font-size: 18px; margin: 10px 0 20px;
-  color: var(--gold);
-  font-family: 'JetBrains Mono', monospace;
+/* Game Over */
+.go-title{font-size:30px !important;margin-bottom:6px !important}
+.go-sub{font-size:16px;margin:8px 0 18px;font-family:'JetBrains Mono',monospace}
+.go-sub.win{color:var(--gold)}
+.go-sub.lose{color:var(--pink)}
+.go-stats{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--dim);line-height:2.2}
+.go-stats b{color:var(--text)}
+
+/* Controls help */
+.controls-bar{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  display:flex;gap:16px;padding:8px 20px;
+  background:var(--panel);border:1px solid var(--border);border-radius:10px;
+  font-size:10px;color:var(--dim);z-index:50;
 }
-.gameover-stats {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px; color: var(--dim);
-  line-height: 2;
+.controls-bar kbd{
+  display:inline-block;padding:2px 7px;background:var(--card);
+  border:1px solid var(--border2);border-radius:4px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--text);font-weight:600;margin:0 2px;
 }
 
 /* Toasts */
-#toast-container {
-  position: fixed; bottom: 20px; right: 20px;
-  display: flex; flex-direction: column-reverse; gap: 8px;
-  z-index: 9999; pointer-events: none;
+#toast-container{position:fixed;bottom:60px;right:20px;display:flex;flex-direction:column-reverse;gap:8px;z-index:9999;pointer-events:none}
+.toast{
+  padding:10px 20px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;
+  color:#fff;opacity:0;transform:translateX(50px);transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
 }
-.toast {
-  padding: 10px 20px; border-radius: 8px;
-  font-size: 13px; font-weight: 600;
-  color: #fff;
-  opacity: 0; transform: translateX(40px);
-  transition: all 0.3s ease;
-}
-.toast.show { opacity: 1; transform: translateX(0); }
-.toast-info { background: rgba(0,180,220,0.92); }
-.toast-error { background: rgba(220,50,80,0.92); }
-.toast-success { background: rgba(30,200,110,0.92); }
-.toast-attack { background: rgba(255,100,40,0.92); }
+.toast.show{opacity:1;transform:translateX(0)}
+.toast-info{background:rgba(0,180,220,0.92)}
+.toast-error{background:rgba(220,40,70,0.92)}
+.toast-success{background:rgba(0,200,100,0.92)}
+.toast-attack{background:linear-gradient(135deg,rgba(255,123,0,0.95),rgba(255,56,117,0.95))}
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--dim2);border-radius:3px}
 </style>
 </head>
 <body>
 
 <div id="toast-container"></div>
 
-<!-- ============ LOGIN ============ -->
+<!-- ═══════ LOGIN ═══════ -->
 <div id="login-screen" class="screen active">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
   <div class="login-card">
-    <span class="logo-text">SCOTT</span>
-    <span class="logo-sub">Supreme Clearing Optimized Tetris Titan</span>
+    <div class="logo">
+      <span class="logo-main">TETR<span class="logo-dot">.</span>TROPA</span>
+      <span class="logo-sub">Squad Up &bull; Stack Up &bull; Throw Down</span>
+    </div>
     <div class="login-form">
-      <input type="text" id="username-input" class="input" placeholder="Enter your username" maxlength="16" autocomplete="off" spellcheck="false">
+      <div class="input-wrap">
+        <input type="text" id="username-input" class="input" placeholder="Enter your username" maxlength="16" autocomplete="off" spellcheck="false">
+      </div>
       <button id="login-btn" class="btn btn-primary">ENTER THE ARENA</button>
     </div>
+    <div class="login-version">v2.0</div>
   </div>
 </div>
 
-<!-- ============ LOBBY ============ -->
+<!-- ═══════ LOBBY ═══════ -->
 <div id="lobby-screen" class="screen">
-  <div class="lobby-header">
-    <span class="logo-text">SCOTT</span>
-    <span class="welcome">Welcome, <b id="display-name"></b></span>
+  <div class="lobby-top">
+    <span class="logo-main">TETR<span class="logo-dot">.</span>TROPA</span>
+    <span class="lobby-welcome">Welcome, <b id="display-name"></b></span>
   </div>
   <div class="lobby-body">
     <div class="lobby-actions">
-      <button id="create-duel-btn" class="btn btn-create">CREATE DUEL (1v1)</button>
-      <button id="create-trio-btn" class="btn btn-create">CREATE TRIO (1v1v1)</button>
+      <button id="create-duel-btn" class="btn btn-create">DUEL (1v1)</button>
+      <button id="create-trio-btn" class="btn btn-create">TRIO (1v1v1)</button>
       <button id="solo-btn" class="btn btn-solo">SOLO PLAY</button>
     </div>
     <div class="room-list">
-      <div class="room-list-header">OPEN ROOMS</div>
+      <div class="room-list-hdr">
+        <span>OPEN ROOMS</span>
+        <button class="refresh-btn" id="refresh-btn">REFRESH</button>
+      </div>
       <div class="room-list-body" id="room-list-body">
-        <div class="no-rooms">No rooms yet. Create one!</div>
+        <div class="no-rooms">No rooms yet -- create one and invite your tropa!</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ============ GAME ============ -->
+<!-- ═══════ GAME ═══════ -->
 <div id="game-screen" class="screen">
-  <div class="game-topbar">
+  <div class="game-top">
     <button id="leave-btn" class="btn btn-danger btn-sm">LEAVE</button>
-    <span class="logo-text">SCOTT</span>
-    <span id="game-status" class="game-status"></span>
+    <span class="logo-main">TETR<span class="logo-dot">.</span>TROPA</span>
+    <div class="game-status">
+      <span id="game-mode-label"></span>
+      <span id="ai-badge-el" class="ai-badge" style="display:none">AI ACTIVE</span>
+      <div id="ai-controls" class="ai-controls" style="display:none">
+        <label>SPEED</label>
+        <input type="range" id="ai-speed-slider" class="speed-slider" min="1" max="10" value="7">
+        <span class="speed-label" id="ai-speed-label">7</span>
+      </div>
+    </div>
   </div>
   <div class="game-body">
     <div class="player-section">
       <div class="side-col left-col">
         <div class="panel">
           <div class="panel-title">HOLD</div>
-          <canvas id="hold-canvas" width="112" height="70"></canvas>
+          <canvas id="hold-canvas" width="116" height="72"></canvas>
         </div>
         <div class="panel" id="stats-panel">
           <div class="stat-row"><span class="stat-label">SCORE</span><span class="stat-value" id="st-score">0</span></div>
           <div class="stat-row"><span class="stat-label">LINES</span><span class="stat-value" id="st-lines">0</span></div>
           <div class="stat-row"><span class="stat-label">LEVEL</span><span class="stat-value" id="st-level">1</span></div>
           <div class="stat-row"><span class="stat-label">COMBO</span><span class="stat-value" id="st-combo">0</span></div>
-          <div class="stat-row"><span class="stat-label">PPS</span><span class="stat-value" id="st-pps">0.0</span></div>
-          <div class="stat-row"><span class="stat-label">TIME</span><span class="stat-value" id="st-time">0:00</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat-mini">PPS <span id="st-pps">0.0</span></div>
+          <div class="stat-mini">APM <span id="st-apm">0</span></div>
+          <div class="stat-mini">TIME <span id="st-time">0:00</span></div>
+        </div>
+        <div class="atk-counter">
+          <div class="atk-label">ATTACK</div>
+          <div class="atk-value" id="st-atk">0</div>
         </div>
       </div>
       <div class="board-col">
         <div class="board-wrapper">
           <div class="garbage-bar" id="garbage-bar"></div>
-          <canvas id="main-board"></canvas>
+          <canvas id="main-board" class="board-glow"></canvas>
         </div>
       </div>
       <div class="side-col right-col">
         <div class="panel">
           <div class="panel-title">NEXT</div>
-          <canvas id="next-canvas" width="112" height="380"></canvas>
+          <canvas id="next-canvas" width="116" height="390"></canvas>
         </div>
       </div>
     </div>
     <div class="opponents-section" id="opponents-section"></div>
   </div>
 
-  <!-- Room waiting -->
+  <!-- Controls help bar -->
+  <div class="controls-bar" id="controls-bar">
+    <span><kbd>&larr;</kbd><kbd>&rarr;</kbd> Move</span>
+    <span><kbd>&uarr;</kbd> Rotate</span>
+    <span><kbd>Space</kbd> Drop</span>
+    <span><kbd>C</kbd> Hold</span>
+    <span><kbd>Z</kbd> Spin</span>
+  </div>
+
+  <!-- Room overlay -->
   <div id="room-overlay" class="overlay hidden">
     <div class="overlay-card">
       <h2 id="room-title">ROOM</h2>
-      <div class="room-players-list" id="room-players-list"></div>
-      <button id="ready-btn" class="btn btn-primary">READY</button>
+      <div id="room-players-list"></div>
+      <button id="ready-btn" class="btn btn-primary" style="margin-top:18px">READY</button>
       <div class="room-hint">All players must be ready to start</div>
     </div>
   </div>
-
   <!-- Countdown -->
-  <div id="countdown-overlay" class="overlay hidden">
-    <div id="countdown-content"></div>
-  </div>
-
+  <div id="cd-overlay" class="overlay hidden"><div id="cd-content"></div></div>
   <!-- Game Over -->
-  <div id="gameover-overlay" class="overlay hidden">
+  <div id="go-overlay" class="overlay hidden">
     <div class="overlay-card">
-      <h2 class="gameover-title" id="gameover-title">GAME OVER</h2>
-      <div class="gameover-subtitle" id="gameover-subtitle"></div>
-      <div class="gameover-stats" id="gameover-stats"></div>
-      <button id="gameover-lobby-btn" class="btn btn-primary" style="margin-top:20px">BACK TO LOBBY</button>
+      <h2 class="go-title" id="go-title">GAME OVER</h2>
+      <div class="go-sub" id="go-sub"></div>
+      <div class="go-stats" id="go-stats"></div>
+      <button id="go-lobby-btn" class="btn btn-primary" style="margin-top:22px">BACK TO LOBBY</button>
     </div>
   </div>
 </div>
 
 <script>
 // ================================================================
-//  SCOTT - Supreme Clearing Optimized Tetris Titan (Client)
+//  TETR.TROPA - Client Engine
 // ================================================================
+const COLS=10,ROWS=20,BUF=4,TOTAL=ROWS+BUF,CELL=28,SCELL=14;
 
-const COLS = 10, ROWS = 20, BUF = 4, TOTAL = ROWS + BUF;
-const CELL = 28, SCELL = 14;
-
-// ── Piece data ──
-const SHAPES = {
+const SHAPES={
   I:[[[0,0],[1,0],[2,0],[3,0]],[[2,0],[2,1],[2,2],[2,3]],[[0,2],[1,2],[2,2],[3,2]],[[1,0],[1,1],[1,2],[1,3]]],
   O:[[[0,0],[1,0],[0,1],[1,1]],[[0,0],[1,0],[0,1],[1,1]],[[0,0],[1,0],[0,1],[1,1]],[[0,0],[1,0],[0,1],[1,1]]],
   T:[[[0,0],[1,0],[2,0],[1,1]],[[1,0],[0,1],[1,1],[1,2]],[[1,0],[0,1],[1,1],[2,1]],[[0,0],[0,1],[1,1],[0,2]]],
@@ -520,52 +473,21 @@ const SHAPES = {
   J:[[[0,0],[0,1],[1,1],[2,1]],[[1,0],[2,0],[1,1],[1,2]],[[0,0],[1,0],[2,0],[2,1]],[[1,0],[1,1],[0,2],[1,2]]],
   L:[[[2,0],[0,1],[1,1],[2,1]],[[1,0],[1,1],[1,2],[2,2]],[[0,0],[1,0],[2,0],[0,1]],[[0,0],[1,0],[1,1],[1,2]]]
 };
-
-const COLORS = {
-  I:'#00dcff', O:'#ffdc32', T:'#b43cff',
-  S:'#32ff64', Z:'#ff3c46', J:'#3c64ff', L:'#ff9632'
+const COLORS={I:'#00e5ff',O:'#ffdd33',T:'#b84dff',S:'#33ff77',Z:'#ff3355',J:'#4477ff',L:'#ff8833'};
+const KICKS={
+  JLSTZ:{'0,1':[[-1,0],[-1,-1],[0,2],[-1,2]],'1,0':[[1,0],[1,1],[0,-2],[1,-2]],'1,2':[[1,0],[1,1],[0,-2],[1,-2]],'2,1':[[-1,0],[-1,-1],[0,2],[-1,2]],'2,3':[[1,0],[1,-1],[0,2],[1,2]],'3,2':[[-1,0],[-1,1],[0,-2],[-1,-2]],'3,0':[[-1,0],[-1,1],[0,-2],[-1,-2]],'0,3':[[1,0],[1,-1],[0,2],[1,2]]},
+  I:{'0,1':[[-2,0],[1,0],[-2,1],[1,-2]],'1,0':[[2,0],[-1,0],[2,-1],[-1,2]],'1,2':[[-1,0],[2,0],[-1,-2],[2,1]],'2,1':[[1,0],[-2,0],[1,2],[-2,-1]],'2,3':[[2,0],[-1,0],[2,-1],[-1,2]],'3,2':[[-2,0],[1,0],[-2,1],[1,-2]],'3,0':[[1,0],[-2,0],[1,2],[-2,-1]],'0,3':[[-1,0],[2,0],[-1,-2],[2,1]]}
 };
 
-const KICKS = {
-  JLSTZ:{
-    '0,1':[[-1,0],[-1,-1],[0,2],[-1,2]],'1,0':[[1,0],[1,1],[0,-2],[1,-2]],
-    '1,2':[[1,0],[1,1],[0,-2],[1,-2]],'2,1':[[-1,0],[-1,-1],[0,2],[-1,2]],
-    '2,3':[[1,0],[1,-1],[0,2],[1,2]],'3,2':[[-1,0],[-1,1],[0,-2],[-1,-2]],
-    '3,0':[[-1,0],[-1,1],[0,-2],[-1,-2]],'0,3':[[1,0],[1,-1],[0,2],[1,2]]
-  },
-  I:{
-    '0,1':[[-2,0],[1,0],[-2,1],[1,-2]],'1,0':[[2,0],[-1,0],[2,-1],[-1,2]],
-    '1,2':[[-1,0],[2,0],[-1,-2],[2,1]],'2,1':[[1,0],[-2,0],[1,2],[-2,-1]],
-    '2,3':[[2,0],[-1,0],[2,-1],[-1,2]],'3,2':[[-2,0],[1,0],[-2,1],[1,-2]],
-    '3,0':[[1,0],[-2,0],[1,2],[-2,-1]],'0,3':[[-1,0],[2,0],[-1,-2],[2,1]]
-  }
-};
+function gc(name,rot,x,y){return SHAPES[name][rot%SHAPES[name].length].map(([dx,dy])=>[x+dx,y+dy]);}
+function hx(h){const v=parseInt(h.slice(1),16);return[(v>>16)&255,(v>>8)&255,v&255];}
 
-function cells(name, rot, x, y) {
-  return SHAPES[name][rot % SHAPES[name].length].map(([dx,dy])=>[x+dx,y+dy]);
-}
-
-function hexToRgb(h) {
-  const v = parseInt(h.slice(1),16);
-  return [(v>>16)&255,(v>>8)&255,v&255];
-}
-
-// ── Board ──
-class Board {
-  constructor() { this.g = []; for(let r=0;r<TOTAL;r++) this.g.push(new Array(COLS).fill(null)); }
-  ok(c) { for(const[x,y]of c){if(x<0||x>=COLS||y>=TOTAL)return false;if(y>=0&&this.g[y][x]!==null)return false;}return true; }
-  lock(c,col) { for(const[x,y]of c) if(y>=0&&y<TOTAL&&x>=0&&x<COLS) this.g[y][x]=col; }
-  clear() {
-    let n=0;
-    for(let r=TOTAL-1;r>=0;r--) {
-      if(this.g[r].every(c=>c!==null)){this.g.splice(r,1);this.g.unshift(new Array(COLS).fill(null));n++;}
-    }
-    return n;
-  }
-  addGarbage(lines) {
-    const hole=Math.floor(Math.random()*COLS);
-    for(let i=0;i<lines;i++){this.g.shift();const row=new Array(COLS).fill('#555566');row[hole]=null;this.g.push(row);}
-  }
+class Board{
+  constructor(){this.g=[];for(let r=0;r<TOTAL;r++)this.g.push(new Array(COLS).fill(null));}
+  ok(c){for(const[x,y]of c){if(x<0||x>=COLS||y>=TOTAL)return false;if(y>=0&&this.g[y][x]!==null)return false;}return true;}
+  lock(c,col){for(const[x,y]of c)if(y>=0&&y<TOTAL&&x>=0&&x<COLS)this.g[y][x]=col;}
+  clear(){let n=0;for(let r=TOTAL-1;r>=0;r--){if(this.g[r].every(c=>c!==null)){this.g.splice(r,1);this.g.unshift(new Array(COLS).fill(null));n++;}}return n;}
+  addGarbage(lines){const hole=Math.floor(Math.random()*COLS);for(let i=0;i<lines;i++){this.g.shift();const row=new Array(COLS).fill('#444466');row[hole]=null;this.g.push(row);}}
   hAt(c){for(let r=0;r<TOTAL;r++)if(this.g[r][c]!==null)return TOTAL-r;return 0;}
   aggH(){let h=0;for(let c=0;c<COLS;c++)h+=this.hAt(c);return h;}
   holes(){let h=0;for(let c=0;c<COLS;c++){let f=false;for(let r=0;r<TOTAL;r++){if(this.g[r][c]!==null)f=true;else if(f)h++;}}return h;}
@@ -577,492 +499,262 @@ class Board {
   serialize(){return this.g;}
 }
 
-// ── Bag ──
-class Bag {
-  constructor(){this.b=[];}
-  next(){if(!this.b.length){this.b=['I','O','T','S','Z','J','L'];for(let i=this.b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[this.b[i],this.b[j]]=[this.b[j],this.b[i]];}}return this.b.pop();}
-}
+class Bag{constructor(){this.b=[];}next(){if(!this.b.length){this.b=['I','O','T','S','Z','J','L'];for(let i=6;i>0;i--){const j=Math.floor(Math.random()*(i+1));[this.b[i],this.b[j]]=[this.b[j],this.b[i]];}}return this.b.pop();}}
 
-// ── AI ──
-class ScottAI {
-  eval(board, lc) {
-    let s = 7.6*lc - 0.51*board.aggH() - 3.56*board.holes() - 0.18*board.bump()
-            - 0.4*board.colT() - 0.32*board.rowT() - 0.33*board.wells();
-    if(board.aggH()===0 && lc>0) s += 15;
-    return s;
+class AI{
+  eval(board,lc){
+    return 7.6*lc-0.51*board.aggH()-3.56*board.holes()-0.18*board.bump()
+      -0.4*board.colT()-0.32*board.rowT()-0.33*board.wells()+(board.aggH()===0&&lc>0?15:0);
   }
-  placements(board, name) {
-    const res=[], seen=new Set(), nRot=SHAPES[name].length;
-    for(let rot=0;rot<nRot;rot++){
-      for(let x=-2;x<COLS+2;x++){
-        let y=0, c=cells(name,rot,x,y);
-        if(!board.ok(c)){y=-2;c=cells(name,rot,x,y);if(!board.ok(c))continue;}
-        while(board.ok(cells(name,rot,x,y+1)))y++;
-        c=cells(name,rot,x,y);
-        const key=c.map(p=>p[0]+','+p[1]).sort().join(';');
-        if(seen.has(key))continue; seen.add(key);
-        const sim=board.clone(); sim.lock(c,COLORS[name]); const lc=sim.clear();
-        res.push({rot,x,y,board:sim,lines:lc});
-      }
+  placements(board,name){
+    const res=[],seen=new Set(),nR=SHAPES[name].length;
+    for(let rot=0;rot<nR;rot++)for(let x=-2;x<COLS+2;x++){
+      let y=0,c=gc(name,rot,x,y);
+      if(!board.ok(c)){y=-2;c=gc(name,rot,x,y);if(!board.ok(c))continue;}
+      while(board.ok(gc(name,rot,x,y+1)))y++;
+      c=gc(name,rot,x,y);const key=c.map(p=>p[0]+','+p[1]).sort().join(';');
+      if(seen.has(key))continue;seen.add(key);
+      const sim=board.clone();sim.lock(c,COLORS[name]);const lc=sim.clear();
+      res.push({rot,x,y,board:sim,lines:lc});
     }
     return res;
   }
-  best(board, name, nxt) {
-    const ps=this.placements(board,name);
-    if(!ps.length)return null;
-    let bestS=-Infinity, bestM=null;
-    const la=nxt&&nxt.length?nxt[0]:null;
+  best(board,name,nxt){
+    const ps=this.placements(board,name);if(!ps.length)return null;
+    let bS=-Infinity,bM=null;const la=nxt&&nxt.length?nxt[0]:null;
     for(const p of ps){
       let s=this.eval(p.board,p.lines);
-      if(la){
-        const np=this.placements(p.board,la);
-        if(np.length){s+=0.4*Math.max(...np.map(n=>this.eval(n.board,n.lines)));}
-        else s-=100;
-      }
-      if(s>bestS){bestS=s;bestM=p;}
+      if(la){const np=this.placements(p.board,la);if(np.length)s+=0.4*Math.max(...np.map(n=>this.eval(n.board,n.lines)));else s-=100;}
+      if(s>bS){bS=s;bM=p;}
     }
-    return bestM;
+    return bM;
   }
 }
 
-// ── Particles ──
-class Particles {
+class Particles{
   constructor(){this.ps=[];}
-  emit(x,y,color,n=10){
-    for(let i=0;i<n;i++) this.ps.push({
-      x,y,vx:(Math.random()-0.5)*8,vy:Math.random()*-5-1,
-      life:0.4+Math.random()*0.6,color,size:1.5+Math.random()*3
-    });
-  }
-  update(dt){
-    for(const p of this.ps){p.x+=p.vx;p.y+=p.vy;p.vy+=12*dt;p.life-=dt;}
-    this.ps=this.ps.filter(p=>p.life>0);
-  }
-  draw(ctx,ox,oy){
-    for(const p of this.ps){
-      ctx.globalAlpha=Math.max(0,p.life);
-      ctx.fillStyle=p.color;
-      const s=p.size*p.life;
-      ctx.fillRect(ox+p.x-s/2,oy+p.y-s/2,s,s);
-    }
-    ctx.globalAlpha=1;
-  }
+  emit(x,y,color,n=8){for(let i=0;i<n;i++)this.ps.push({x,y,vx:(Math.random()-0.5)*7,vy:Math.random()*-5-2,life:0.5+Math.random()*0.6,color,size:1.5+Math.random()*3.5});}
+  update(dt){for(const p of this.ps){p.x+=p.vx;p.y+=p.vy;p.vy+=14*dt;p.life-=dt;}this.ps=this.ps.filter(p=>p.life>0);}
+  draw(ctx){for(const p of this.ps){ctx.globalAlpha=Math.max(0,Math.min(1,p.life*1.5));ctx.fillStyle=p.color;const s=p.size*p.life;ctx.beginPath();ctx.arc(p.x,p.y,s,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;}
 }
 
-// ── TetrisGame ──
-class TetrisGame {
-  constructor(canvas, opts={}) {
-    this.cv=canvas; this.ctx=canvas.getContext('2d');
-    this.cs=opts.cellSize||CELL;
-    this.cv.width=COLS*this.cs; this.cv.height=ROWS*this.cs;
+// ── Game ──
+class Game{
+  constructor(canvas,opts={}){
+    this.cv=canvas;this.ctx=canvas.getContext('2d');
+    this.cs=opts.cellSize||CELL;this.cv.width=COLS*this.cs;this.cv.height=ROWS*this.cs;
     this.isAI=opts.isAI||false;
-    this.onGarbage=opts.onGarbage||(()=>{});
-    this.onDie=opts.onDie||(()=>{});
-    this.onUpdate=opts.onUpdate||(()=>{});
-    this.board=new Board(); this.bag=new Bag();
-    this.ai=this.isAI?new ScottAI():null;
-    this.particles=new Particles();
-    this.score=0;this.lines=0;this.level=1;this.combo=-1;this.pcs=0;
+    this.onGarbage=opts.onGarbage||(()=>{});this.onDie=opts.onDie||(()=>{});this.onUpdate=opts.onUpdate||(()=>{});
+    this.board=new Board();this.bag=new Bag();this.ai=this.isAI?new AI():null;this.particles=new Particles();
+    this.score=0;this.lines=0;this.level=1;this.combo=-1;this.pcs=0;this.atk=0;
     this.over=false;this.started=false;
     this.name=null;this.rot=0;this.px=0;this.py=0;
     this.nq=[];this.held=null;this.holdUsed=false;
     this.gTimer=0;this.lockTimer=0;this.locking=false;this.lockResets=0;
     this.pending=0;
-    this.keys={};this.dasT={};this.dasP={};
-    this.DAS=133;this.ARR=15;
+    this.keys={};this.dasT={};this.dasP={};this.DAS=133;this.ARR=15;
     this.aiTarget=null;this.aiT=0;this.aiSpeed=55;this.aiPh='think';
     this.t0=0;this.flash=0;this.shake=0;
-    for(let i=0;i<5;i++) this.nq.push(this.bag.next());
+    for(let i=0;i<5;i++)this.nq.push(this.bag.next());
   }
-
+  setAISpeed(level){this.aiSpeed=Math.max(15,120-(level*11));}
   start(){this.started=true;this.t0=performance.now();this.spawn();}
-
   spawn(){
-    if(this.pending>0){this.board.addGarbage(this.pending);this.pending=0;this.shake=150;}
+    if(this.pending>0){this.board.addGarbage(this.pending);this.pending=0;this.shake=180;}
     this.name=this.nq.shift();this.nq.push(this.bag.next());
-    this.rot=0;this.px=3;this.py=0;
-    this.holdUsed=false;this.locking=false;this.lockTimer=0;this.lockResets=0;
+    this.rot=0;this.px=3;this.py=0;this.holdUsed=false;this.locking=false;this.lockTimer=0;this.lockResets=0;
     this.aiTarget=null;this.aiPh='think';this.gTimer=0;
-    if(!this.board.ok(cells(this.name,0,this.px,this.py))){
-      this.py=-1;
-      if(!this.board.ok(cells(this.name,0,this.px,this.py))){this.die();return;}
-    }
+    if(!this.board.ok(gc(this.name,0,this.px,this.py))){this.py=-1;if(!this.board.ok(gc(this.name,0,this.px,this.py))){this.die();return;}}
   }
-
-  ghostY(){let y=this.py;while(this.board.ok(cells(this.name,this.rot,this.px,y+1)))y++;return y;}
-
-  move(dx){
-    if(this.board.ok(cells(this.name,this.rot,this.px+dx,this.py))){
-      this.px+=dx;
-      if(this.locking&&this.lockResets<15){this.lockTimer=0;this.lockResets++;}
-      return true;
-    }
-    return false;
-  }
-
+  ghostY(){let y=this.py;while(this.board.ok(gc(this.name,this.rot,this.px,y+1)))y++;return y;}
+  move(dx){if(this.board.ok(gc(this.name,this.rot,this.px+dx,this.py))){this.px+=dx;if(this.locking&&this.lockResets<15){this.lockTimer=0;this.lockResets++;}return true;}return false;}
   rotate(dir=1){
-    const n=SHAPES[this.name].length;
-    const nr=((this.rot+dir)%n+n)%n;
-    if(this.board.ok(cells(this.name,nr,this.px,this.py))){this.rot=nr;this._resetLock();return true;}
-    const tbl=this.name==='I'?'I':'JLSTZ';
-    const k=KICKS[tbl]?.[this.rot+','+nr];
-    if(k){for(const[dx,dy]of k){
-      if(this.board.ok(cells(this.name,nr,this.px+dx,this.py+dy))){
-        this.px+=dx;this.py+=dy;this.rot=nr;this._resetLock();return true;
-      }
-    }}
+    const n=SHAPES[this.name].length,nr=((this.rot+dir)%n+n)%n;
+    if(this.board.ok(gc(this.name,nr,this.px,this.py))){this.rot=nr;this._rl();return true;}
+    const tbl=this.name==='I'?'I':'JLSTZ',k=KICKS[tbl]?.[this.rot+','+nr];
+    if(k)for(const[dx,dy]of k){if(this.board.ok(gc(this.name,nr,this.px+dx,this.py+dy))){this.px+=dx;this.py+=dy;this.rot=nr;this._rl();return true;}}
     return false;
   }
-  _resetLock(){if(this.locking&&this.lockResets<15){this.lockTimer=0;this.lockResets++;}}
-
-  softDrop(){
-    if(this.board.ok(cells(this.name,this.rot,this.px,this.py+1))){
-      this.py++;this.score++;this.gTimer=0;return true;
-    }
-    return false;
-  }
-
-  hardDrop(){
-    let d=0;
-    while(this.board.ok(cells(this.name,this.rot,this.px,this.py+1))){this.py++;d++;}
-    this.score+=d*2; this.lockPiece();
-  }
-
+  _rl(){if(this.locking&&this.lockResets<15){this.lockTimer=0;this.lockResets++;}}
+  softDrop(){if(this.board.ok(gc(this.name,this.rot,this.px,this.py+1))){this.py++;this.score++;this.gTimer=0;return true;}return false;}
+  hardDrop(){let d=0;while(this.board.ok(gc(this.name,this.rot,this.px,this.py+1))){this.py++;d++;}this.score+=d*2;this.lockPiece();}
   hold(){
-    if(this.holdUsed)return;
-    this.holdUsed=true;
+    if(this.holdUsed)return;this.holdUsed=true;
     if(this.held===null){this.held=this.name;this.spawn();}
-    else{const t=this.held;this.held=this.name;this.name=t;this.rot=0;this.px=3;this.py=0;
-      this.locking=false;this.lockTimer=0;this.lockResets=0;this.aiTarget=null;this.aiPh='think';}
+    else{const t=this.held;this.held=this.name;this.name=t;this.rot=0;this.px=3;this.py=0;this.locking=false;this.lockTimer=0;this.lockResets=0;this.aiTarget=null;this.aiPh='think';}
   }
-
   lockPiece(){
-    const c=cells(this.name,this.rot,this.px,this.py);
-    const col=COLORS[this.name];
+    const c=gc(this.name,this.rot,this.px,this.py),col=COLORS[this.name];
     this.board.lock(c,col);
-    // particles
-    for(const[cx,cy]of c) this.particles.emit(cx*this.cs+this.cs/2,(cy-BUF)*this.cs+this.cs/2,col,4);
+    for(const[cx,cy]of c)this.particles.emit(cx*this.cs+this.cs/2,(cy-BUF)*this.cs+this.cs/2,col,3);
     const cleared=this.board.clear();
     if(cleared>0){
-      this.combo++;this.flash=120;
-      let garb=0;
-      if(cleared===2)garb=1;else if(cleared===3)garb=2;else if(cleared===4)garb=4;
+      this.combo++;this.flash=130;
+      let garb=0;if(cleared===2)garb=1;else if(cleared===3)garb=2;else if(cleared===4)garb=4;
       if(this.combo>0)garb+=1;
-      if(garb>0)this.onGarbage(garb);
+      if(garb>0){this.atk+=garb;this.onGarbage(garb);}
       this.score+=[0,100,300,500,800][cleared]*this.level;
       if(this.combo>0)this.score+=50*this.combo*this.level;
-      // more particles for line clears
-      for(let i=0;i<cleared*15;i++){
-        this.particles.emit(Math.random()*this.cv.width, Math.random()*this.cv.height,
-          ['#00dcff','#a050ff','#ff3c6e','#ffc830'][Math.floor(Math.random()*4)], 1);
-      }
-    } else { this.combo=-1; }
+      const colors=[COLORS.I,COLORS.T,COLORS.S,COLORS.Z];
+      for(let i=0;i<cleared*18;i++)this.particles.emit(Math.random()*this.cv.width,Math.random()*this.cv.height,colors[Math.floor(Math.random()*4)],1);
+    }else{this.combo=-1;}
     this.lines+=cleared;this.level=Math.floor(this.lines/10)+1;this.pcs++;
-    this.onUpdate();
-    this.spawn();
+    this.onUpdate();this.spawn();
   }
-
   die(){this.over=true;this.onDie();}
-
   receiveGarbage(n){this.pending+=n;}
 
-  // ── Input ──
-  keyDown(action){
-    if(this.isAI||this.over||!this.started)return;
-    if(this.keys[action])return;
-    this.keys[action]=true;
-    this.execKey(action);
-    this.dasT[action]=0;this.dasP[action]='das';
-  }
-  keyUp(action){
-    this.keys[action]=false;this.dasT[action]=0;this.dasP[action]=null;
-  }
-  execKey(a){
-    if(a==='left')this.move(-1);else if(a==='right')this.move(1);
-    else if(a==='soft')this.softDrop();else if(a==='cw')this.rotate(1);
-    else if(a==='ccw')this.rotate(-1);else if(a==='hard')this.hardDrop();
-    else if(a==='hold')this.hold();
-  }
-  updateDAS(dt){
-    for(const a of['left','right','soft']){
-      if(!this.keys[a])continue;
-      this.dasT[a]=(this.dasT[a]||0)+dt;
-      if(this.dasP[a]==='das'&&this.dasT[a]>=this.DAS){this.dasP[a]='arr';this.dasT[a]=0;this.execKey(a);}
-      else if(this.dasP[a]==='arr'&&this.dasT[a]>=this.ARR){this.dasT[a]-=this.ARR;this.execKey(a);}
-    }
-  }
+  keyDown(a){if(this.isAI||this.over||!this.started)return;if(this.keys[a])return;this.keys[a]=true;this.execKey(a);this.dasT[a]=0;this.dasP[a]='das';}
+  keyUp(a){this.keys[a]=false;this.dasT[a]=0;this.dasP[a]=null;}
+  execKey(a){if(a==='left')this.move(-1);else if(a==='right')this.move(1);else if(a==='soft')this.softDrop();else if(a==='cw')this.rotate(1);else if(a==='ccw')this.rotate(-1);else if(a==='hard')this.hardDrop();else if(a==='hold')this.hold();}
+  updateDAS(dt){for(const a of['left','right','soft']){if(!this.keys[a])continue;this.dasT[a]=(this.dasT[a]||0)+dt;if(this.dasP[a]==='das'&&this.dasT[a]>=this.DAS){this.dasP[a]='arr';this.dasT[a]=0;this.execKey(a);}else if(this.dasP[a]==='arr'&&this.dasT[a]>=this.ARR){this.dasT[a]-=this.ARR;this.execKey(a);}}}
 
-  // ── AI ──
   updateAI(dt){
-    this.aiT+=dt;
-    if(this.aiT<this.aiSpeed)return;
-    this.aiT=0;
+    this.aiT+=dt;if(this.aiT<this.aiSpeed)return;this.aiT=0;
     if(this.aiPh==='think'){
-      const nxt=this.nq.slice(0,2);
-      let best=this.ai.best(this.board,this.name,nxt);
-      // hold logic
-      if(this.held&&!this.holdUsed){
-        const bh=this.ai.best(this.board,this.held,nxt);
-        if(bh&&best){
-          if(this.ai.eval(bh.board,bh.lines)>this.ai.eval(best.board,best.lines)+0.5){
-            this.hold();this.aiTarget=bh;this.aiPh='exec';return;
-          }
-        }
-      }
-      if(!this.holdUsed&&!this.held){
-        const bn=this.ai.best(this.board,this.nq[0],nxt.slice(1));
-        if(best&&bn&&this.ai.eval(bn.board,bn.lines)>this.ai.eval(best.board,best.lines)+2){
-          this.hold();best=this.ai.best(this.board,this.name,nxt);
-        }
-      }
+      const nxt=this.nq.slice(0,2);let best=this.ai.best(this.board,this.name,nxt);
+      if(this.held&&!this.holdUsed){const bh=this.ai.best(this.board,this.held,nxt);if(bh&&best&&this.ai.eval(bh.board,bh.lines)>this.ai.eval(best.board,best.lines)+0.5){this.hold();this.aiTarget=bh;this.aiPh='exec';return;}}
+      if(!this.holdUsed&&!this.held){const bn=this.ai.best(this.board,this.nq[0],nxt.slice(1));if(best&&bn&&this.ai.eval(bn.board,bn.lines)>this.ai.eval(best.board,best.lines)+2){this.hold();best=this.ai.best(this.board,this.name,nxt);}}
       this.aiTarget=best;this.aiPh='exec';
-    } else if(this.aiPh==='exec'){
+    }else if(this.aiPh==='exec'){
       if(!this.aiTarget){this.hardDrop();return;}
       const t=this.aiTarget;
       if(this.rot!==t.rot){this.rotate(1);return;}
-      if(this.px<t.x){this.move(1);return;}
-      if(this.px>t.x){this.move(-1);return;}
+      if(this.px<t.x){this.move(1);return;}if(this.px>t.x){this.move(-1);return;}
       this.hardDrop();
     }
   }
 
-  // ── Update ──
   update(dt){
     if(!this.started||this.over)return;
-    if(this.isAI) this.updateAI(dt);
-    else this.updateDAS(dt);
-    // gravity (non-AI)
+    if(this.isAI)this.updateAI(dt);else this.updateDAS(dt);
     if(!this.isAI){
-      const gms=Math.max(50,1000-(this.level-1)*50);
-      this.gTimer+=dt;
-      while(this.gTimer>=gms){this.gTimer-=gms;
-        if(!this.softDrop()){if(!this.locking){this.locking=true;this.lockTimer=0;}}
-      }
-      if(this.locking){
-        this.lockTimer+=dt;
-        if(this.lockTimer>=500)this.lockPiece();
-        if(this.board.ok(cells(this.name,this.rot,this.px,this.py+1))){this.locking=false;this.lockTimer=0;}
-      }
+      const gms=Math.max(50,1000-(this.level-1)*50);this.gTimer+=dt;
+      while(this.gTimer>=gms){this.gTimer-=gms;if(!this.softDrop()){if(!this.locking){this.locking=true;this.lockTimer=0;}}}
+      if(this.locking){this.lockTimer+=dt;if(this.lockTimer>=500)this.lockPiece();if(this.board.ok(gc(this.name,this.rot,this.px,this.py+1))){this.locking=false;this.lockTimer=0;}}
     }
-    if(this.flash>0)this.flash-=dt;
-    if(this.shake>0)this.shake-=dt;
+    if(this.flash>0)this.flash-=dt;if(this.shake>0)this.shake-=dt;
     this.particles.update(dt/1000);
   }
 
-  // ── Render ──
   render(){
-    const ctx=this.ctx, cs=this.cs, w=this.cv.width, h=this.cv.height;
-    let ox=0, oy=0;
-    if(this.shake>0){ox=Math.random()*6-3;oy=Math.random()*6-3;}
+    const ctx=this.ctx,cs=this.cs,w=this.cv.width,h=this.cv.height;
+    let ox=0,oy=0;if(this.shake>0){ox=(Math.random()-0.5)*5;oy=(Math.random()-0.5)*5;}
     ctx.save();ctx.translate(ox,oy);
-
-    // BG
-    ctx.fillStyle='#08080f';ctx.fillRect(0,0,w,h);
-
+    ctx.fillStyle='#07070e';ctx.fillRect(0,0,w,h);
     // Grid
-    ctx.strokeStyle='rgba(30,30,60,0.4)';ctx.lineWidth=0.5;
+    ctx.strokeStyle='rgba(28,28,56,0.45)';ctx.lineWidth=0.5;
     for(let r=0;r<=ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*cs);ctx.lineTo(w,r*cs);ctx.stroke();}
     for(let c=0;c<=COLS;c++){ctx.beginPath();ctx.moveTo(c*cs,0);ctx.lineTo(c*cs,h);ctx.stroke();}
-
+    // Grid dots
+    ctx.fillStyle='rgba(50,50,90,0.5)';
+    for(let r=0;r<=ROWS;r++)for(let c=0;c<=COLS;c++){ctx.beginPath();ctx.arc(c*cs,r*cs,1,0,Math.PI*2);ctx.fill();}
     // Locked cells
-    for(let r=BUF;r<TOTAL;r++) for(let c=0;c<COLS;c++){
-      if(this.board.g[r][c]) this._drawCell(ctx,c,(r-BUF),this.board.g[r][c],cs);
-    }
-
+    for(let r=BUF;r<TOTAL;r++)for(let c=0;c<COLS;c++){if(this.board.g[r][c])this._dc(ctx,c,r-BUF,this.board.g[r][c],cs);}
     if(this.name&&!this.over){
       // Ghost
-      const gy=this.ghostY();
-      if(gy!==this.py){
-        ctx.globalAlpha=0.18;
-        for(const[x,y]of cells(this.name,this.rot,this.px,gy))
-          if(y>=BUF) this._drawCell(ctx,x,y-BUF,COLORS[this.name],cs);
-        ctx.globalAlpha=1;
-      }
-      // Current piece
-      for(const[x,y]of cells(this.name,this.rot,this.px,this.py))
-        if(y>=BUF) this._drawCell(ctx,x,y-BUF,COLORS[this.name],cs,true);
+      const gy=this.ghostY();if(gy!==this.py){ctx.globalAlpha=0.15;for(const[x,y]of gc(this.name,this.rot,this.px,gy))if(y>=BUF)this._dc(ctx,x,y-BUF,COLORS[this.name],cs);ctx.globalAlpha=1;}
+      // Current
+      for(const[x,y]of gc(this.name,this.rot,this.px,this.py))if(y>=BUF)this._dc(ctx,x,y-BUF,COLORS[this.name],cs,true);
     }
-
     // Flash
-    if(this.flash>0){
-      ctx.globalAlpha=this.flash/120*0.15;
-      ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
-      ctx.globalAlpha=1;
-    }
-
-    // Particles
-    this.particles.draw(ctx,0,0);
-
-    // Game over overlay
-    if(this.over){
-      ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(0,0,w,h);
-      ctx.fillStyle='#ff3c6e';ctx.font='bold 22px "JetBrains Mono"';ctx.textAlign='center';
-      ctx.fillText('K.O.',w/2,h/2);ctx.textAlign='start';
-    }
+    if(this.flash>0){ctx.globalAlpha=this.flash/130*0.12;ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.globalAlpha=1;}
+    this.particles.draw(ctx);
+    if(this.over){ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(0,0,w,h);ctx.fillStyle='#ff3875';ctx.font='bold 24px "JetBrains Mono"';ctx.textAlign='center';ctx.fillText('K.O.',w/2,h/2);ctx.textAlign='start';}
     ctx.restore();
   }
-
-  _drawCell(ctx,x,y,color,cs,glow=false){
-    const sx=x*cs,sy=y*cs;
-    const [r,g,b]=hexToRgb(color);
-    // base
-    ctx.fillStyle=`rgb(${r*.6|0},${g*.6|0},${b*.6|0})`;
-    ctx.fillRect(sx,sy,cs-1,cs-1);
-    // main
-    ctx.fillStyle=color;
-    ctx.fillRect(sx+1,sy+1,cs-3,cs-3);
-    // highlight
-    ctx.fillStyle=`rgba(255,255,255,0.18)`;
-    ctx.fillRect(sx+1,sy+1,cs-3,2);
-    ctx.fillRect(sx+1,sy+1,2,cs-3);
-    if(glow){
-      ctx.shadowColor=color;ctx.shadowBlur=10;
-      ctx.fillStyle='rgba(0,0,0,0)';ctx.fillRect(sx,sy,cs-1,cs-1);
-      ctx.shadowBlur=0;
-    }
+  _dc(ctx,x,y,color,cs,glow=false){
+    const sx=x*cs,sy=y*cs,[r,g,b]=hx(color);
+    // Shadow
+    ctx.fillStyle=`rgb(${r*.5|0},${g*.5|0},${b*.5|0})`;ctx.fillRect(sx,sy,cs-1,cs-1);
+    // Main
+    const grad=ctx.createLinearGradient(sx,sy,sx,sy+cs);
+    grad.addColorStop(0,`rgb(${Math.min(255,r*1.15)|0},${Math.min(255,g*1.15)|0},${Math.min(255,b*1.15)|0})`);
+    grad.addColorStop(1,color);
+    ctx.fillStyle=grad;ctx.fillRect(sx+1,sy+1,cs-3,cs-3);
+    // Highlight
+    ctx.fillStyle='rgba(255,255,255,0.2)';ctx.fillRect(sx+1,sy+1,cs-3,2);
+    ctx.fillStyle='rgba(255,255,255,0.1)';ctx.fillRect(sx+1,sy+3,2,cs-5);
+    // Inner shadow
+    ctx.fillStyle='rgba(0,0,0,0.15)';ctx.fillRect(sx+1,sy+cs-3,cs-3,1);
+    if(glow){ctx.shadowColor=color;ctx.shadowBlur=12;ctx.fillStyle='rgba(0,0,0,0)';ctx.fillRect(sx,sy,cs-1,cs-1);ctx.shadowBlur=0;}
   }
-
-  getState(){
-    return {
-      board:this.board.serialize(),
-      currentPiece:this.name?{name:this.name,rot:this.rot,x:this.px,y:this.py,ghostY:this.ghostY()}:null,
-      score:this.score,lines:this.lines,level:this.level
-    };
-  }
+  getState(){return{board:this.board.serialize(),currentPiece:this.name?{name:this.name,rot:this.rot,x:this.px,y:this.py,ghostY:this.ghostY()}:null,score:this.score,lines:this.lines,level:this.level};}
 }
 
-// ── Mini piece renderer ──
-function drawMini(ctx, name, ox, oy, cs=16){
-  if(!name)return;
-  const col=COLORS[name];
-  const [r,g,b]=hexToRgb(col);
+// ── Helpers ──
+function drawMini(ctx,name,ox,oy,cs=16){
+  if(!name)return;const col=COLORS[name];
   for(const[dx,dy]of SHAPES[name][0]){
-    const sx=ox+dx*cs, sy=oy+dy*cs;
-    ctx.fillStyle=col;
-    ctx.fillRect(sx,sy,cs-1,cs-1);
-    ctx.fillStyle=`rgba(255,255,255,0.15)`;
-    ctx.fillRect(sx,sy,cs-1,2);
+    const sx=ox+dx*cs,sy=oy+dy*cs;ctx.fillStyle=col;
+    ctx.fillRect(sx,sy,cs-1,cs-1);ctx.fillStyle='rgba(255,255,255,0.15)';ctx.fillRect(sx,sy,cs-1,2);
   }
 }
-
-// ── Opponent board renderer ──
-function renderOppBoard(ctx, data, cs){
-  const w=COLS*cs, h=ROWS*cs;
-  ctx.fillStyle='#08080f';ctx.fillRect(0,0,w,h);
-  // grid
-  ctx.strokeStyle='rgba(30,30,60,0.25)';ctx.lineWidth=0.5;
+function renderOpp(ctx,data,cs){
+  const w=COLS*cs,h=ROWS*cs;ctx.fillStyle='#07070e';ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle='rgba(25,25,50,0.3)';ctx.lineWidth=0.5;
   for(let r=0;r<=ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*cs);ctx.lineTo(w,r*cs);ctx.stroke();}
   for(let c=0;c<=COLS;c++){ctx.beginPath();ctx.moveTo(c*cs,0);ctx.lineTo(c*cs,h);ctx.stroke();}
-  // cells
-  if(data.board){
-    for(let r=BUF;r<TOTAL;r++) for(let c=0;c<COLS;c++){
-      const v=data.board[r]?.[c];
-      if(v&&v!==0){
-        ctx.fillStyle=v;
-        ctx.fillRect(c*cs,(r-BUF)*cs,cs-1,cs-1);
-      }
-    }
-  }
-  // current piece
-  if(data.currentPiece){
-    const p=data.currentPiece;
-    const col=COLORS[p.name];
-    if(col){
-      // ghost
-      if(p.ghostY!==undefined){
-        ctx.globalAlpha=0.15;
-        for(const[x,y]of cells(p.name,p.rot,p.x,p.ghostY))
-          if(y>=BUF){ctx.fillStyle=col;ctx.fillRect(x*cs,(y-BUF)*cs,cs-1,cs-1);}
-        ctx.globalAlpha=1;
-      }
-      for(const[x,y]of cells(p.name,p.rot,p.x,p.y))
-        if(y>=BUF){ctx.fillStyle=col;ctx.fillRect(x*cs,(y-BUF)*cs,cs-1,cs-1);}
-    }
-  }
+  if(data.board)for(let r=BUF;r<TOTAL;r++)for(let c=0;c<COLS;c++){const v=data.board[r]?.[c];if(v&&v!==0){ctx.fillStyle=v;ctx.fillRect(c*cs,(r-BUF)*cs,cs-1,cs-1);}}
+  if(data.currentPiece){const p=data.currentPiece,col=COLORS[p.name];if(col){
+    if(p.ghostY!==undefined){ctx.globalAlpha=0.12;for(const[x,y]of gc(p.name,p.rot,p.x,p.ghostY))if(y>=BUF){ctx.fillStyle=col;ctx.fillRect(x*cs,(y-BUF)*cs,cs-1,cs-1);}ctx.globalAlpha=1;}
+    for(const[x,y]of gc(p.name,p.rot,p.x,p.y))if(y>=BUF){ctx.fillStyle=col;ctx.fillRect(x*cs,(y-BUF)*cs,cs-1,cs-1);}
+  }}
 }
-
-// ── Toast ──
-function toast(msg, type='info', dur=3000){
-  const el=document.createElement('div');
-  el.className='toast toast-'+type; el.textContent=msg;
-  document.getElementById('toast-container').appendChild(el);
-  requestAnimationFrame(()=>el.classList.add('show'));
-  setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),300);},dur);
-}
+function toast(msg,type='info',dur=3000){const el=document.createElement('div');el.className='toast toast-'+type;el.textContent=msg;document.getElementById('toast-container').appendChild(el);requestAnimationFrame(()=>el.classList.add('show'));setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),350);},dur);}
 
 // ================================================================
 //  APP
 // ================================================================
-class App {
+class App{
   constructor(){
-    this.username=''; this.playerId=null; this.ws=null;
-    this.game=null; this.opponents=new Map();
-    this.room=null; this.isScott=false; this.isSolo=false;
-    this.raf=null; this.lastT=0; this.sendT=0;
-
+    this.username='';this.playerId=null;this.ws=null;
+    this.game=null;this.opponents=new Map();
+    this.room=null;this.isBot=false;this.isSolo=false;
+    this.raf=null;this.lastT=0;this.sendT=0;
     this.holdCtx=document.getElementById('hold-canvas').getContext('2d');
     this.nextCtx=document.getElementById('next-canvas').getContext('2d');
-
-    this._bindUI();
+    this._bind();
   }
 
-  _bindUI(){
-    // Login
+  _bind(){
     document.getElementById('login-btn').onclick=()=>this._login();
     document.getElementById('username-input').addEventListener('keydown',e=>{if(e.key==='Enter')this._login();});
-
-    // Lobby
     document.getElementById('create-duel-btn').onclick=()=>this._send({type:'create_room',mode:'duel'});
     document.getElementById('create-trio-btn').onclick=()=>this._send({type:'create_room',mode:'trio'});
     document.getElementById('solo-btn').onclick=()=>this._startSolo();
-
-    // Game
+    document.getElementById('refresh-btn').onclick=()=>this._send({type:'refresh_rooms'});
     document.getElementById('leave-btn').onclick=()=>this._leave();
     document.getElementById('ready-btn').onclick=()=>this._send({type:'ready'});
-    document.getElementById('gameover-lobby-btn').onclick=()=>this._leave();
+    document.getElementById('go-lobby-btn').onclick=()=>this._leave();
 
-    // Keyboard
-    window.addEventListener('keydown',e=>{
-      if(!this.game||this.game.over||!this.game.started)return;
-      const map={'ArrowLeft':'left','ArrowRight':'right','ArrowDown':'soft','ArrowUp':'cw',
-        'KeyZ':'ccw','KeyX':'cw','KeyC':'hold','ShiftLeft':'hold','Space':'hard'};
-      const a=map[e.code];
-      if(a){e.preventDefault();this.game.keyDown(a);}
+    // AI speed slider
+    document.getElementById('ai-speed-slider').addEventListener('input',e=>{
+      const v=parseInt(e.target.value);
+      document.getElementById('ai-speed-label').textContent=v;
+      if(this.game)this.game.setAISpeed(v);
     });
-    window.addEventListener('keyup',e=>{
-      if(!this.game)return;
-      const map={'ArrowLeft':'left','ArrowRight':'right','ArrowDown':'soft','ArrowUp':'cw',
-        'KeyZ':'ccw','KeyX':'cw','KeyC':'hold','ShiftLeft':'hold','Space':'hard'};
-      const a=map[e.code];
-      if(a)this.game.keyUp(a);
-    });
+
+    // Keys
+    const keyMap={'ArrowLeft':'left','ArrowRight':'right','ArrowDown':'soft','ArrowUp':'cw','KeyZ':'ccw','KeyX':'cw','KeyC':'hold','ShiftLeft':'hold','Space':'hard'};
+    window.addEventListener('keydown',e=>{if(!this.game||this.game.over||!this.game.started)return;const a=keyMap[e.code];if(a){e.preventDefault();this.game.keyDown(a);}});
+    window.addEventListener('keyup',e=>{if(!this.game)return;const a=keyMap[e.code];if(a)this.game.keyUp(a);});
   }
 
   _login(){
-    const inp=document.getElementById('username-input');
-    const name=inp.value.trim();
-    if(!name||name.length<1){toast('Enter a username','error');return;}
+    const inp=document.getElementById('username-input'),name=inp.value.trim();
+    if(!name){toast('Enter a username','error');return;}
     this.username=name;
-    this.isScott=name.toLowerCase()==='scott';
+    this.isBot=name.toLowerCase()==='kamotedelight';
     document.getElementById('display-name').textContent=name;
     this._connect();
   }
 
   _connect(){
-    try{
-      const proto=location.protocol==='https:'?'wss':'ws';
-      this.ws=new WebSocket(`${proto}://${location.host}`);
-    }catch(e){toast('Cannot connect to server','error');return;}
-    this.ws.onopen=()=>{
-      this._send({type:'login',username:this.username});
-    };
-    this.ws.onmessage=(ev)=>{
-      let msg;try{msg=JSON.parse(ev.data);}catch{return;}
-      this._onMsg(msg);
-    };
-    this.ws.onclose=()=>{
-      if(this.room)toast('Disconnected','error');
-    };
+    try{const proto=location.protocol==='https:'?'wss':'ws';this.ws=new WebSocket(`${proto}://${location.host}`);}catch{toast('Cannot connect','error');return;}
+    this.ws.onopen=()=>this._send({type:'login',username:this.username});
+    this.ws.onmessage=ev=>{try{this._onMsg(JSON.parse(ev.data));}catch{}};
+    this.ws.onclose=()=>{if(this.room)toast('Disconnected','error');};
     this.ws.onerror=()=>toast('Connection error','error');
   }
 
@@ -1070,149 +762,90 @@ class App {
 
   _onMsg(msg){
     switch(msg.type){
-      case 'login_success':
-        this.playerId=msg.playerId;
-        this._showScreen('lobby');
-        break;
-      case 'room_list':
-        this._renderRooms(msg.rooms);
-        break;
-      case 'room_joined':
-        this.room=msg.room;
-        this._showScreen('game');
-        this._showRoomOverlay(msg.room);
-        break;
-      case 'room_update':
-        this.room=msg.room;
-        this._showRoomOverlay(msg.room);
-        break;
-      case 'countdown':
-        this._showCountdown(msg.seconds);
-        break;
-      case 'game_start':
-        this._startMultiplayer();
-        break;
-      case 'opponent_update':
-        this._updateOpponent(msg);
-        break;
-      case 'receive_garbage':
-        if(this.game&&!this.game.over){
-          this.game.receiveGarbage(msg.lines);
-          toast(`${msg.from} sent ${msg.lines} garbage!`,'attack',1500);
-        }
-        break;
-      case 'player_died':
-        this._markDead(msg.playerId, msg.username);
-        break;
-      case 'player_left':
-        this._removeOpponent(msg.playerId);
-        break;
-      case 'game_end':
-        this._showGameEnd(msg);
-        break;
-      case 'error':
-        toast(msg.message,'error');
-        break;
+      case 'login_success':this.playerId=msg.playerId;this._show('lobby');break;
+      case 'room_list':this._renderRooms(msg.rooms);break;
+      case 'room_joined':this.room=msg.room;this._show('game');this._showRoom(msg.room);break;
+      case 'room_update':this.room=msg.room;this._showRoom(msg.room);break;
+      case 'countdown':this._showCD(msg.seconds);break;
+      case 'game_start':this._startMP();break;
+      case 'opponent_update':this._updateOpp(msg);break;
+      case 'receive_garbage':if(this.game&&!this.game.over){this.game.receiveGarbage(msg.lines);toast(`${msg.from} sent ${msg.lines} lines!`,'attack',1800);}break;
+      case 'player_died':this._markDead(msg.playerId,msg.username);break;
+      case 'player_left':this._removeOpp(msg.playerId);break;
+      case 'game_end':this._showEnd(msg);break;
+      case 'error':toast(msg.message,'error');break;
     }
   }
 
-  // ── Screens ──
-  _showScreen(id){
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-    document.getElementById(id+'-screen').classList.add('active');
-  }
+  _show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id+'-screen').classList.add('active');}
 
-  // ── Lobby ──
   _renderRooms(rooms){
     const body=document.getElementById('room-list-body');
-    if(!rooms.length){body.innerHTML='<div class="no-rooms">No rooms yet. Create one!</div>';return;}
+    if(!rooms.length){body.innerHTML='<div class="no-rooms">No rooms yet -- create one and invite your tropa!</div>';return;}
     body.innerHTML='';
     for(const r of rooms){
       const card=document.createElement('div');card.className='room-card';
-      const modeClass=r.mode==='trio'?'trio':'duel';
-      card.innerHTML=`
-        <span class="room-mode ${modeClass}">${r.mode.toUpperCase()}</span>
-        <span class="room-names">${r.names.join(', ')}</span>
-        <span class="room-count">${r.playerCount}/${r.maxPlayers}</span>
-        ${r.state==='waiting'&&r.playerCount<r.maxPlayers?
-          `<button class="btn btn-join" data-id="${r.id}">JOIN</button>`
-          :`<span class="room-count">${r.state}</span>`}
-      `;
-      const btn=card.querySelector('.btn-join');
-      if(btn) btn.onclick=()=>this._send({type:'join_room',roomId:r.id});
+      card.innerHTML=`<span class="room-badge ${r.mode}">${r.mode.toUpperCase()}</span><span class="room-names">${r.names.join(', ')}</span><span class="room-count">${r.playerCount}/${r.maxPlayers}</span>${r.state==='waiting'&&r.playerCount<r.maxPlayers?`<button class="btn btn-join" data-id="${r.id}">JOIN</button>`:`<span class="room-count" style="color:var(--gold)">${r.state}</span>`}`;
+      const btn=card.querySelector('.btn-join');if(btn)btn.onclick=()=>this._send({type:'join_room',roomId:r.id});
       body.appendChild(card);
     }
   }
 
-  // ── Room overlay ──
-  _showRoomOverlay(room){
+  _showRoom(room){
     const ov=document.getElementById('room-overlay');ov.classList.remove('hidden');
-    document.getElementById('countdown-overlay').classList.add('hidden');
-    document.getElementById('gameover-overlay').classList.add('hidden');
+    document.getElementById('cd-overlay').classList.add('hidden');document.getElementById('go-overlay').classList.add('hidden');
     document.getElementById('room-title').textContent=room.mode.toUpperCase()+' ROOM';
     const list=document.getElementById('room-players-list');list.innerHTML='';
     for(const p of room.players){
       const div=document.createElement('div');div.className='room-player';
-      div.innerHTML=`<span class="name">${p.username}${p.id===room.host?' (host)':''}</span>
-        <span class="ready-tag ${p.ready?'yes':'no'}">${p.ready?'READY':'NOT READY'}</span>`;
+      div.innerHTML=`<span><span class="name">${p.username}</span>${p.id===room.host?'<span class="host-tag">HOST</span>':''}</span><span class="ready-tag ${p.ready?'yes':'no'}">${p.ready?'READY':'NOT READY'}</span>`;
       list.appendChild(div);
     }
-    const btn=document.getElementById('ready-btn');
     const me=room.players.find(p=>p.id===this.playerId);
-    btn.textContent=me&&me.ready?'UNREADY':'READY';
+    document.getElementById('ready-btn').textContent=me&&me.ready?'UNREADY':'READY';
   }
 
-  // ── Countdown ──
-  _showCountdown(sec){
+  _showCD(sec){
     document.getElementById('room-overlay').classList.add('hidden');
-    const ov=document.getElementById('countdown-overlay');ov.classList.remove('hidden');
-    ov.querySelector('#countdown-content').innerHTML=
-      `<div class="countdown-num" style="animation:countPulse 0.6s ease-out">${sec}</div>`;
+    const ov=document.getElementById('cd-overlay');ov.classList.remove('hidden');
+    ov.querySelector('#cd-content').innerHTML=sec>0?`<div class="cd-num">${sec}</div>`:`<div class="go-text">GO!</div>`;
   }
 
-  // ── Solo ──
   _startSolo(){
-    this.isSolo=true;
-    this._showScreen('game');
-    document.getElementById('room-overlay').classList.add('hidden');
-    document.getElementById('countdown-overlay').classList.add('hidden');
-    document.getElementById('gameover-overlay').classList.add('hidden');
-    this._initGame();
-    this.game.start();
-    // Show status
-    const status=document.getElementById('game-status');
-    status.textContent='SOLO MODE';
-    if(this.isScott) status.innerHTML+='<span class="ai-badge">AI ACTIVE</span>';
+    this.isSolo=true;this._show('game');
+    ['room-overlay','cd-overlay','go-overlay'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+    this._initGame();this.game.start();
+    document.getElementById('game-mode-label').textContent='SOLO';
+    this._showAIUI();
+    if(!this.isBot)document.getElementById('controls-bar').style.display='flex';
+    else document.getElementById('controls-bar').style.display='none';
   }
 
-  // ── Multiplayer start ──
-  _startMultiplayer(){
-    document.getElementById('countdown-overlay').classList.add('hidden');
-    document.getElementById('room-overlay').classList.add('hidden');
-    // Create opponent canvases
-    this._setupOpponents();
-    this._initGame();
-    this.game.start();
-    const status=document.getElementById('game-status');
-    status.textContent=this.room.mode.toUpperCase();
-    if(this.isScott) status.innerHTML+='<span class="ai-badge">AI ACTIVE</span>';
+  _startMP(){
+    document.getElementById('cd-overlay').classList.add('hidden');document.getElementById('room-overlay').classList.add('hidden');
+    this._setupOpps();this._initGame();this.game.start();
+    document.getElementById('game-mode-label').textContent=this.room.mode.toUpperCase();
+    this._showAIUI();
+    if(!this.isBot)document.getElementById('controls-bar').style.display='flex';
+    else document.getElementById('controls-bar').style.display='none';
   }
 
-  _setupOpponents(){
-    const sec=document.getElementById('opponents-section');sec.innerHTML='';
-    this.opponents.clear();
+  _showAIUI(){
+    document.getElementById('ai-badge-el').style.display=this.isBot?'inline-block':'none';
+    document.getElementById('ai-controls').style.display=this.isBot?'flex':'none';
+    if(this.isBot){const slider=document.getElementById('ai-speed-slider');this.game.setAISpeed(parseInt(slider.value));}
+  }
+
+  _setupOpps(){
+    const sec=document.getElementById('opponents-section');sec.innerHTML='';this.opponents.clear();
     if(!this.room)return;
     for(const p of this.room.players){
       if(p.id===this.playerId)continue;
       const card=document.createElement('div');card.className='opponent-card';card.id='opp-'+p.id;
-      const cv=document.createElement('canvas');cv.width=COLS*SCELL;cv.height=ROWS*SCELL;
-      cv.className='opponent-canvas';
-      card.innerHTML=`<div class="opponent-name">${p.username}</div>`;
-      card.appendChild(cv);
-      const stats=document.createElement('div');stats.className='opponent-stats';stats.textContent='0 pts | 0 lines';
-      card.appendChild(stats);
-      const dead=document.createElement('div');dead.className='opponent-dead hidden';dead.textContent='ELIMINATED';
-      card.appendChild(dead);
+      const cv=document.createElement('canvas');cv.width=COLS*SCELL;cv.height=ROWS*SCELL;cv.className='opp-canvas';
+      card.innerHTML=`<div class="opp-name">${p.username}</div>`;card.appendChild(cv);
+      const stats=document.createElement('div');stats.className='opp-stats';stats.textContent='0 pts | 0 lines';card.appendChild(stats);
+      const dead=document.createElement('div');dead.className='opp-dead hidden';dead.textContent='ELIMINATED';card.appendChild(dead);
       sec.appendChild(card);
       this.opponents.set(p.id,{canvas:cv,ctx:cv.getContext('2d'),stats,dead,data:{}});
     }
@@ -1221,161 +854,96 @@ class App {
   _initGame(){
     if(this.raf)cancelAnimationFrame(this.raf);
     const cv=document.getElementById('main-board');
-    this.game=new TetrisGame(cv,{
-      cellSize:CELL,
-      isAI:this.isScott,
-      onGarbage:(n)=>{if(!this.isSolo)this._send({type:'send_garbage',lines:n});},
-      onDie:()=>{
-        if(!this.isSolo)this._send({type:'game_over'});
-        if(this.isSolo)this._showSoloGameOver();
-      },
-      onUpdate:()=>{
-        if(!this.isSolo)this._sendBoard();
-      }
+    this.game=new Game(cv,{cellSize:CELL,isAI:this.isBot,
+      onGarbage:n=>{if(!this.isSolo)this._send({type:'send_garbage',lines:n});},
+      onDie:()=>{if(!this.isSolo)this._send({type:'game_over'});if(this.isSolo)this._showSoloEnd();},
+      onUpdate:()=>{if(!this.isSolo)this._sendBoard();}
     });
-    this.lastT=performance.now();this.sendT=0;
-    this._loop(this.lastT);
+    this.lastT=performance.now();this.sendT=0;this._loop(this.lastT);
   }
 
   _loop(ts){
-    const dt=ts-this.lastT; this.lastT=ts;
+    const dt=ts-this.lastT;this.lastT=ts;
     if(this.game){
-      this.game.update(dt);
-      this.game.render();
-      this._renderSidePanels();
-      this._renderOpponents();
-      this._updateStats(dt);
-      // Periodic board send
-      if(!this.isSolo&&this.game.started&&!this.game.over){
-        this.sendT+=dt;
-        if(this.sendT>=100){this.sendT=0;this._sendBoard();}
-      }
-      // Garbage bar
-      const bar=document.getElementById('garbage-bar');
-      const gh=Math.min(this.game.pending*CELL, ROWS*CELL);
-      bar.style.height=gh+'px';
+      this.game.update(dt);this.game.render();this._renderSide();this._renderOpps();this._updateStats();
+      if(!this.isSolo&&this.game.started&&!this.game.over){this.sendT+=dt;if(this.sendT>=100){this.sendT=0;this._sendBoard();}}
+      const bar=document.getElementById('garbage-bar');bar.style.height=Math.min(this.game.pending*CELL,ROWS*CELL)+'px';
     }
     this.raf=requestAnimationFrame(t=>this._loop(t));
   }
 
-  _renderSidePanels(){
+  _renderSide(){
     if(!this.game)return;
-    // Hold
-    const hc=this.holdCtx;
-    hc.fillStyle='#0c0c1a';hc.fillRect(0,0,112,70);
-    if(this.game.held) drawMini(hc,this.game.held,16,10,18);
-    // Next
-    const nc=this.nextCtx;
-    nc.fillStyle='#0c0c1a';nc.fillRect(0,0,112,380);
-    for(let i=0;i<this.game.nq.length;i++){
-      drawMini(nc,this.game.nq[i],16,10+i*72,16);
-    }
+    const hc=this.holdCtx;hc.fillStyle='#0b0b18';hc.fillRect(0,0,116,72);
+    if(this.game.held)drawMini(hc,this.game.held,18,8,18);
+    const nc=this.nextCtx;nc.fillStyle='#0b0b18';nc.fillRect(0,0,116,390);
+    for(let i=0;i<this.game.nq.length;i++)drawMini(nc,this.game.nq[i],18,8+i*74,16);
   }
 
   _updateStats(){
     if(!this.game)return;
     document.getElementById('st-score').textContent=this.game.score.toLocaleString();
     document.getElementById('st-lines').textContent=this.game.lines;
-    document.getElementById('st-level').textContent=this.game.level;
+    const lv=document.getElementById('st-level');lv.textContent=this.game.level;
+    lv.className='stat-value'+(this.game.level>=5?' highlight':'');
     document.getElementById('st-combo').textContent=Math.max(0,this.game.combo);
-    const elapsed=(performance.now()-this.game.t0)/1000;
-    const pps=this.game.pcs/Math.max(1,elapsed);
-    document.getElementById('st-pps').textContent=pps.toFixed(1);
-    const mins=Math.floor(elapsed/60);
-    const secs=Math.floor(elapsed%60);
-    document.getElementById('st-time').textContent=`${mins}:${secs.toString().padStart(2,'0')}`;
+    document.getElementById('st-atk').textContent=this.game.atk;
+    const el=(performance.now()-this.game.t0)/1000;
+    document.getElementById('st-pps').textContent=(this.game.pcs/Math.max(1,el)).toFixed(1);
+    document.getElementById('st-apm').textContent=Math.round(this.game.pcs*2.5/Math.max(1,el/60));
+    const m=Math.floor(el/60),s=Math.floor(el%60);
+    document.getElementById('st-time').textContent=m+':'+s.toString().padStart(2,'0');
   }
 
-  _renderOpponents(){
-    for(const[id,opp]of this.opponents){
-      if(opp.data.board) renderOppBoard(opp.ctx,opp.data,SCELL);
-    }
-  }
+  _renderOpps(){for(const[,opp]of this.opponents)if(opp.data.board)renderOpp(opp.ctx,opp.data,SCELL);}
 
-  _updateOpponent(msg){
+  _updateOpp(msg){
     let opp=this.opponents.get(msg.playerId);
     if(!opp){
-      // Dynamically create if not exists
       const sec=document.getElementById('opponents-section');
       const card=document.createElement('div');card.className='opponent-card';card.id='opp-'+msg.playerId;
-      const cv=document.createElement('canvas');cv.width=COLS*SCELL;cv.height=ROWS*SCELL;cv.className='opponent-canvas';
-      card.innerHTML=`<div class="opponent-name">${msg.username}</div>`;
-      card.appendChild(cv);
-      const stats=document.createElement('div');stats.className='opponent-stats';
-      card.appendChild(stats);
-      const dead=document.createElement('div');dead.className='opponent-dead hidden';dead.textContent='ELIMINATED';
-      card.appendChild(dead);
+      const cv=document.createElement('canvas');cv.width=COLS*SCELL;cv.height=ROWS*SCELL;cv.className='opp-canvas';
+      card.innerHTML=`<div class="opp-name">${msg.username}</div>`;card.appendChild(cv);
+      const stats=document.createElement('div');stats.className='opp-stats';card.appendChild(stats);
+      const dead=document.createElement('div');dead.className='opp-dead hidden';dead.textContent='ELIMINATED';card.appendChild(dead);
       sec.appendChild(card);
-      opp={canvas:cv,ctx:cv.getContext('2d'),stats,dead,data:{}};
-      this.opponents.set(msg.playerId,opp);
+      opp={canvas:cv,ctx:cv.getContext('2d'),stats,dead,data:{}};this.opponents.set(msg.playerId,opp);
     }
     opp.data={board:msg.board,currentPiece:msg.currentPiece};
-    opp.stats.textContent=`${(msg.score||0).toLocaleString()} pts | ${msg.lines||0} lines`;
+    opp.stats.textContent=`${(msg.score||0).toLocaleString()} | ${msg.lines||0} lines`;
   }
 
-  _markDead(id, username){
-    const opp=this.opponents.get(id);
-    if(opp) opp.dead.classList.remove('hidden');
-    toast(`${username} eliminated!`,'info');
+  _markDead(id,name){const opp=this.opponents.get(id);if(opp)opp.dead.classList.remove('hidden');toast(name+' eliminated!','info');}
+  _removeOpp(id){const el=document.getElementById('opp-'+id);if(el)el.remove();this.opponents.delete(id);}
+  _sendBoard(){if(this.game)this._send({type:'board_update',...this.game.getState()});}
+
+  _showEnd(msg){
+    const ov=document.getElementById('go-overlay');ov.classList.remove('hidden');
+    const win=msg.winnerId===this.playerId;
+    document.getElementById('go-title').textContent=win?'VICTORY!':'DEFEATED';
+    const sub=document.getElementById('go-sub');sub.textContent=win?'Last one standing!':'Winner: '+msg.winnerName;
+    sub.className='go-sub '+(win?'win':'lose');
+    if(this.game)document.getElementById('go-stats').innerHTML=`Score: <b>${this.game.score.toLocaleString()}</b><br>Lines: <b>${this.game.lines}</b><br>Level: <b>${this.game.level}</b><br>Attack: <b>${this.game.atk}</b><br>Pieces: <b>${this.game.pcs}</b>`;
   }
 
-  _removeOpponent(id){
-    const el=document.getElementById('opp-'+id);
-    if(el)el.remove();
-    this.opponents.delete(id);
-  }
-
-  _sendBoard(){
-    if(!this.game)return;
-    this._send({type:'board_update',...this.game.getState()});
-  }
-
-  _showGameEnd(msg){
-    const ov=document.getElementById('gameover-overlay');ov.classList.remove('hidden');
-    const isWinner=msg.winnerId===this.playerId;
-    document.getElementById('gameover-title').textContent=isWinner?'VICTORY!':'DEFEATED';
-    document.getElementById('gameover-title').style.color=isWinner?'var(--gold)':'var(--pink)';
-    document.getElementById('gameover-subtitle').textContent=isWinner?
-      'You are the last one standing!':
-      `Winner: ${msg.winnerName}`;
-    if(this.game){
-      document.getElementById('gameover-stats').innerHTML=
-        `Score: ${this.game.score.toLocaleString()}<br>Lines: ${this.game.lines}<br>Level: ${this.game.level}<br>Pieces: ${this.game.pcs}`;
-    }
-  }
-
-  _showSoloGameOver(){
-    const ov=document.getElementById('gameover-overlay');ov.classList.remove('hidden');
-    document.getElementById('gameover-title').textContent='GAME OVER';
-    document.getElementById('gameover-title').style.color='var(--pink)';
-    document.getElementById('gameover-subtitle').textContent='';
-    if(this.game){
-      document.getElementById('gameover-stats').innerHTML=
-        `Score: ${this.game.score.toLocaleString()}<br>Lines: ${this.game.lines}<br>Level: ${this.game.level}<br>Pieces: ${this.game.pcs}`;
-    }
+  _showSoloEnd(){
+    const ov=document.getElementById('go-overlay');ov.classList.remove('hidden');
+    document.getElementById('go-title').textContent='GAME OVER';
+    document.getElementById('go-sub').textContent='';document.getElementById('go-sub').className='go-sub lose';
+    if(this.game)document.getElementById('go-stats').innerHTML=`Score: <b>${this.game.score.toLocaleString()}</b><br>Lines: <b>${this.game.lines}</b><br>Level: <b>${this.game.level}</b><br>Attack: <b>${this.game.atk}</b><br>Pieces: <b>${this.game.pcs}</b>`;
   }
 
   _leave(){
-    if(this.raf)cancelAnimationFrame(this.raf);this.raf=null;
-    this.game=null;
-    this.opponents.clear();
-    document.getElementById('opponents-section').innerHTML='';
-    document.getElementById('gameover-overlay').classList.add('hidden');
-    document.getElementById('countdown-overlay').classList.add('hidden');
-    document.getElementById('room-overlay').classList.add('hidden');
-    if(!this.isSolo){
-      this._send({type:'leave_room'});
-      this._showScreen('lobby');
-      this._send({type:'refresh_rooms'});
-    } else {
-      this.isSolo=false;
-      this._showScreen('lobby');
-    }
+    if(this.raf)cancelAnimationFrame(this.raf);this.raf=null;this.game=null;
+    this.opponents.clear();document.getElementById('opponents-section').innerHTML='';
+    ['go-overlay','cd-overlay','room-overlay'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+    document.getElementById('controls-bar').style.display='none';
+    if(!this.isSolo){this._send({type:'leave_room'});this._show('lobby');this._send({type:'refresh_rooms'});}
+    else{this.isSolo=false;this._show('lobby');}
   }
 }
 
-// ── Init ──
-const app = new App();
+const app=new App();
 </script>
 </body>
 </html>
